@@ -20,5 +20,10 @@ We stress again that this is an implementation and adaptation of the available u
   git clone https://github.com/pathak22/pyflow.git
   cd pyflow/
   python setup.py build_ext -i
-  python demo.py    # -viz option to visualize output
+  ```
+
+3. Download and install mr_saliency.
+  ```Shell
+  cd ISS_uNLC/lib/
+  git clone https://github.com/ruanxiang/mr_saliency.git
   ```
