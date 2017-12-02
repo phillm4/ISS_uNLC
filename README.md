@@ -6,11 +6,12 @@ This library includes what we consider a stripped down version of the available 
 
 We stress again that this is an implementation and adaptation of the available uNLC source code. Installation instructions are provided below for convenience and are specific to our use, however please view the authors’ original source code for complete installation instructions and demo. 
 
-## Se
+## Several Notes Regarding Installation and the Additional Libraries
 
-As pyflow is a wrapper around Ce Liu's C++ implementation of Coarse2Fine [Optical Flow](http://people.csail.mit.edu/celiu/OpticalFlow/), the python wrapper utilizes the python package Cython. Cython consists of C-extensions for Python. When attempting to build the pyflow library, on a windows machine, we obtained the error of "error: Unable to find vcvarsall.bat". After attempting to troubleshoot, it appears that this is a common error and the culprit is with Visual Studio. At the time of study, we were unable to find a solution for this error that worked for us and decided instead to work on an alternative system. We decided to work on an Ubuntu 16.04 LTS system.  
+As pyflow is a wrapper around [Ce Liu's C++ implementation of Coarse2Fine Optical Flow](http://people.csail.mit.edu/celiu/OpticalFlow/), the python wrapper utilizes the python package Cython. Cython consists of C-extensions for Python. When attempting to build the pyflow library, on a windows machine, we obtained the error of "error: Unable to find vcvarsall.bat". After attempting to troubleshoot, it appears that this is a common error and the culprit is with Visual Studio. At the time of study, we were unable to find a solution for this error that worked for us and decided instead to work on an alternative system. We decided to work on an Ubuntu 16.04 LTS system.  
 
 ## Required Libraries and Additional Dependencies
+
   ```Shell
   cv2
   Cython
