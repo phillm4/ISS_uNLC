@@ -6,6 +6,21 @@ This library includes what we consider a stripped down version of the available 
 
 We stress again that this is an implementation and adaptation of the available uNLC source code. Installation instructions are provided below for convenience and are specific to our use, however please view the authors’ original source code for complete installation instructions and demo. 
 
+## Required Libraries and Additional Dependencies
+  ```Shell
+  cv2
+  Cython
+  numpy
+  PIL
+  scipy
+  skimage
+
+  distutils
+  glob
+  os
+  sys
+  ```
+
 ## Installation Instructions
 
 1. Download and install uNLC.
@@ -26,4 +41,5 @@ We stress again that this is an implementation and adaptation of the available u
   ```Shell
   cd ISS_uNLC/lib/
   git clone https://github.com/ruanxiang/mr_saliency.git
+  cp __init__.py mr_saliency/
   ```
