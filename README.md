@@ -27,11 +27,12 @@ As pyflow is a wrapper around [Ce Liu's C++ implementation of Coarse2Fine Optica
   ```
 
 ## Installation Instructions
+The installation instructions mimic those of Pathak’s videoseg, however we neglect the installation of the Dense CRF code, the Kernel Temporal Segmentation code, and DeepMatching.
 
 1. Download and install uNLC.
   ```Shell
   cd ISS_uNLC/lib/
-  git clone https://github.com/pathak22/videoseg
+  git clone https://github.com/pathak22/videoseg.git
   ```
 
 2. Download and install pyflow.
