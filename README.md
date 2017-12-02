@@ -10,14 +10,13 @@ We stress again that this is an implementation and adaptation of the available u
 
 1. Download and install uNLC.
   ```Shell
+  cd ISS_uNLC/lib/
   git clone https://github.com/pathak22/videoseg
-  cd pyflow/
-  python setup.py build_ext -i
-  python demo.py    # -viz option to visualize output
   ```
 
 2. Download and install pyflow.
   ```Shell
+  cd ISS_uNLC/lib/
   git clone https://github.com/pathak22/pyflow.git
   cd pyflow/
   python setup.py build_ext -i
