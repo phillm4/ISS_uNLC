@@ -49,5 +49,5 @@ The installation instructions mimic those of Pathak’s videoseg, however we neg
   git clone https://github.com/ruanxiang/mr_saliency.git
   cp __init__.py mr_saliency/
   ```
-## Comments on Use
+## Observations and Comments on Use
 One observation which we came across was the difference in computation time between OpenCV and skikit-image for the SLIC superpixel construction. While the original authors note that it takes 2.5 seconds per 720x1280 image where there is a max of 200 labelled segments. 
