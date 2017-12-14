@@ -49,5 +49,18 @@ The installation instructions mimic those of Pathak’s videoseg, however we neg
   git clone https://github.com/ruanxiang/mr_saliency.git
   cp __init__.py mr_saliency/
   ```
+  
+In order to make mr_saliency/MR.py compatible with current library versions and python3, several changes need to be made. The first is a change from ‘<>’ to ‘!=’ for the ‘not equal’  conditional operator. Python3 no longer supports ‘<>’. The second change is to remove the importing of the lena image from the skimage.data module. The lena image has been removed from skimage due to copyrights. A simple fix, without going through the rest of the script is to import a different image from the skimage.data model as lena. For example, ‘from skimage.data import astronaut as lena’. To make this process simpler, a modified MR.py script is included with in this repository and can be swapped for the one in the mr_saliency library. These are the only required changes for mr_saliency.
+
+The library should be ready to use. In order to check this, run the iss_checkpaths.py script. 
+Python iss_checkpaths.py
+
+If there are any errors. The paths have not been initialized correctly. If passed, the libray is ready to use for instrument shaft segmentation. 
+
+There are three ways to import data to perform instrument segmentation. These include:
+
+  
+  
+  
 ## Observations and Comments on Use
 One observation which we came across was the difference in computation time between OpenCV and skikit-image for the SLIC superpixel construction. While the original authors note that it takes 2.5 seconds per 720x1280 image where there is a max of 200 labelled segments. 
