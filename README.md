@@ -1,14 +1,12 @@
 # Instrument Shaft Segmentation using Unsupervised Non-Local Consensus Voting (ISS-uNLC)
 
-ISS-uNLC is an application of the methods explored in the 2017 paper, [Learning Features by Watching Objects Move](https://people.eecs.berkeley.edu/~pathak/unsupervised_video/). More specifically, it is an evaluation of the unsupervised bottom-up video motion segmentation algorithm, [uNLC]( https://github.com/pathak22/videoseg), explained in section 5.1 of the paper, on robotic surgery images and the ability to generate pseudo ground truth data for instrument shaft segmentation. As noted by the authors of Learning Features by Watching Objects Move, uNLC is in fact an implementation of Faktor and Irani’s NLC algorithm from their 2014 paper, [Video Segmentation by Non-Local Consensus Voting]( http://www.wisdom.weizmann.ac.il/~vision/NonLocalVideoSegmentation.html). 
+ISS-uNLC is an application of the methods explored in the 2017 paper, [Learning Features by Watching Objects Move](https://people.eecs.berkeley.edu/~pathak/unsupervised_video/). More specifically, it is an evaluation of the unsupervised bottom-up video motion segmentation algorithm, [uNLC]( https://github.com/pathak22/videoseg). uNLC is in an implementation of Faktor and Irani’s NLC algorithm from the 2014 paper, [Video Segmentation by Non-Local Consensus Voting]( http://www.wisdom.weizmann.ac.il/~vision/NonLocalVideoSegmentation.html). 
 
-This library includes what we consider a stripped down version of the available uNLC and choose to implement the aspects that are most relevant to our use. As a result, we impose a several modifications and offer a greater description of the algorithm that is being used. In our source code, we indicte the areas where these modifications take place. Furthermore, we attempt to provide detailed instructions on how to use the software.
-
-We stress again that this is an implementation and adaptation of the available uNLC source code. Installation instructions are provided below for convenience and are specific to our use, however please view the authors’ original source code for complete installation instructions and demo. 
+This library includes modified scripts for the available uNLC and is intended to simplify the installation process. 
 
 ## Several Notes Regarding Installation and the Additional Libraries
 
-As pyflow is a wrapper around [Ce Liu's C++ implementation of Coarse2Fine Optical Flow](http://people.csail.mit.edu/celiu/OpticalFlow/), the python wrapper utilizes the python package Cython. Cython consists of C-extensions for Python. When attempting to build the pyflow library, on a windows machine, we obtained the error of "error: Unable to find vcvarsall.bat". After attempting to troubleshoot, it appears that this is a common error and the culprit is with Visual Studio. At the time of study, we were unable to find a solution for this error that worked for us and decided instead to work on an alternative system. We decided to work on an Ubuntu 16.04 LTS system.  
+One of the required libraries if pyflow. Pyflow is a wrapper around [Ce Liu's C++ implementation of Coarse2Fine Optical Flow](http://people.csail.mit.edu/celiu/OpticalFlow/), and the python wrapper utilizes the python package Cython. Cython consists of C-extensions for Python. When attempting to build the pyflow library on a windows machine, the error, "error: Unable to find vcvarsall.bat" was encountered. This appears to be a common error due to Visual Studio. As a result, all work was completed on an Ubuntu 16.04 LTS system.  
 
 ## Required Libraries and Additional Dependencies
 
@@ -26,8 +24,10 @@ As pyflow is a wrapper around [Ce Liu's C++ implementation of Coarse2Fine Optica
   sys
   ```
 
+Majority of the libraries can be installed via pip or conda with the exception of OpenCV. The uNLC algorithm does work without the FFmpeg dependencies. However, if it is desired to read directly from video files, this is required. 
+
 ## Installation Instructions
-The installation instructions mimic those of Pathak’s videoseg, however we neglect the installation of the Dense CRF code, the Kernel Temporal Segmentation code, and DeepMatching.
+The installation instructions mimic those of Pathak’s videoseg, however the installation of the Dense CRF code, the Kernel Temporal Segmentation code, and DeepMatching are all neglected. These packages need to be installed if it is desired to run Pathak’s full_pipe.py. One change that is required to run the full pipe is that the labels value in CRF utils script needs to be change to a np.int64 data type in order to function properly. A modified CRFutils file is included. 
 
 1. Download and install uNLC.
   ```Shell
