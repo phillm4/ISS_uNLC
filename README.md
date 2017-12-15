@@ -160,7 +160,7 @@ Memory Usage for Sequence: 24.58 MB.
 
 Once the process is complete (it may take several minutes depending on the length of the video), two new folders *src\_images/* and *results/* should have been created where the video is located. One contains the frames from the video (*src\_images/*), the other contains the segmentation results (*results/*). It is not recommend to use a video that is longer than 30 seconds.
 
-Example 2.) Perform segmentation using the `-batch` input. In the context of the *iss\_uNLC.py* script, this option is to be selected if there is a folder, containing several subfolders which contain images. This is illustrated below.
+Example 2.) Perform segmentation using the `-batch` input. In the context of the *iss\_uNLC.py* script, this option is to be selected if there is a folder that contains several subfolders, each of which contain images. This is illustrated below.
 ```
 - batch_folder/
 -- image_directory_00/
@@ -173,10 +173,21 @@ Example 2.) Perform segmentation using the `-batch` input. In the context of the
 --- ...
 -- ...
 ```
+In order to then perform segmentation on this batch, the commands and potential output will mirror those from Example 1. For this example, the included *test\_batch/* will be used as the input batch, the output will be the included *results/* folder. A frame gap of 2 frames will be used. 
+```
+$ cd ISS_uNLC/
+$ python iss_main.py -batch test_batch -out results -fgap 2
 
-No output directory will be specified. A frame gap of 3 is desired. The commands and potential output should then be similar to the following.
+Batch:  0
+Input Directory:  /home/.../ISS_uNLC/test_batch/00
+Output Directory:  /home/.../ISS_uNLC/results
+...
+```
+The output should mimic that of Example 1. 
 
+## Tuning uNLC
 
+If it is desired to adjust any of the parameters for the uNLC besides the frame gap, these can be modified within *iss\_main.py* under the `iss\_uNLC()` function. 
 
 ```python
 # Parameters for uNLC and pyflow.
