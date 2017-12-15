@@ -1,3 +1,5 @@
+## Modified version of the original MR.py script.
+
 ####################################################################
 ## Author:
 ##       Xiang Ruan
@@ -25,13 +27,16 @@
 
 ##
 """
+Editor:     Mitchell Phillips
+File:       MR.py
+Date:       December 2017
 Changes include:
-    Substitute lena for a different image from the 
-    skimage.data library as newer versions have removed the lena 
-    image due to copyrights. 
+    Substitute lena for a different image in the skimage.data
+    library. Newer versions scikit-image have removed lena due to 
+    copyrights. 
 
-    Change the 'not equal' operator '<>' to '!=' to provide 
-    compatibility with python3.
+    Change the 'not equal' operator '<>', to '!=' as to provide 
+    compatibility with Python3.
 """
 ##
 

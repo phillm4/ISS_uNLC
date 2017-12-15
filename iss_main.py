@@ -27,9 +27,9 @@ import os
 import sys
 import time
 
-import _init_nlc_path
-import videoseg.src.nlc as uNLC
-import videoseg.src.utils as utils
+# import _init_nlc_path
+# import videoseg.src.nlc as uNLC
+# import videoseg.src.utils as utils
 
 
 def directory_valid(directory):
@@ -152,7 +152,7 @@ def convert_video(vid_path,save_frames):
 
     vidcap = cv2.VideoCapture(vid_path)
     if not vidcap.isOpened():
-        print('Error loading video. Check inputs.')
+        print('Error loading video. Check inputs or ffMPEG install.')
 
     # Estimated total number of frames in video. 
     video_length = int(vidcap.get(cv2.CAP_PROP_FRAME_COUNT))    
@@ -377,6 +377,8 @@ def iss_uNLC(img_directory,out_directory,frame_gap,batch_number):
     # Place a colored mask over-top a grayscale image and save this 
     # as the segmentation results. May need to change this up when 
     # it is desired to use the images to train a CNN / FCN. 
+    # This mask creating is the same as Pathak's with the only change 
+    # being the use of OpenCV instead of PIL.
     for i in range(sequence_length):
         mask = (uNLC_sequence[i]>segmentation_energy_threshold).astype(np.uint8)
         img_gray = cv2.cvtColor(image_sequence[i],cv2.COLOR_RGB2GRAY)

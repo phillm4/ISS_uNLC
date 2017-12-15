@@ -101,7 +101,8 @@ optional arguments:
 
 Note that there are three different methods for inputing data and two additional arguments which correspond to an output directory a frame gap. The frame gap is important when specifying the frames that uNLC is to compute across in a given image sequence. If a frame gap too small is chosen, memory errors may occur and the computation may take a long time. When using uNLC, it is important to be aware of the length of image sequences and the frame gap as to prevent memory issues. If a frame gap too large is chosen, the obtained results will be useless. Furthermore, uNLC works best on image sequences where there is significant motion by the foreground objects. If the objects are barely moving, or move relatively slow, it may be beneficial to increase the frame gap. The output directory is where the segmented images will be saved. If this is not specified, a results directory will be created at the same level of any given input. Two examples of use are shown below.
 
-Example 1.) Segment a **short** video that is located at *home/.../vidpath/video.avi*. No output directory will be specified. A frame gap of 3 is desired. The commands and potential output should then be similar to the following.
+#### Example (1.) 
+Segment a **short** video that is located at *home/.../vidpath/video.avi*. No output directory will be specified. A frame gap of 3 is desired. The commands and potential output should then be similar to the following.
 ```
 $ cd ISS_uNLC/
 $ python iss_main.py -vid home/.../vidpath/video.avi -fgap 3
@@ -160,7 +161,8 @@ Memory Usage for Sequence: 24.58 MB.
 
 Once the process is complete (it may take several minutes depending on the length of the video), two new folders *src\_images/* and *results/* should have been created where the video is located. One contains the frames from the video (*src\_images/*), the other contains the segmentation results (*results/*). It is not recommend to use a video that is longer than 30 seconds.
 
-Example 2.) Perform segmentation using the `-batch` input. In the context of the *iss\_uNLC.py* script, this option is to be selected if there is a folder that contains several subfolders, each of which contain images. This is illustrated below.
+#### Example (2.) 
+Perform segmentation using the `-batch` input. In the context of the *iss\_uNLC.py* script, this option is to be selected if there is a folder that contains several subfolders, each of which contain images. This is illustrated below.
 ```
 - batch_folder/
 -- image_directory_00/
