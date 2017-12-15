@@ -24,7 +24,6 @@ The majority of the software used for this project is from Pathak's [videoseg](h
 | additional\_tools     | Contains extra scripts that may be beneficial                                 | 
 | lib                   | Location where all external code will be stored                               |  
 | modified\_scripts     | Contains several scripts that will be swapped or placed into the lib folder   | 
-| results               | Empty folder which will be used for the demo                               |  
 | \_init\_nlc\_path.py  | Script which initializes library paths for *iss\_main.py*                     |
 | iss\_main.py          | Program to initiate uNLC algorithm                                            |
 | test\_batch.zip       | Zipped folder containing test images for the program demo                     |
@@ -144,7 +143,7 @@ Perform segmentation using the `-batch` input. In the context of *iss\_main.py*,
 --- ...
 -- ...
 ```
-In order to then perform segmentation on this batch, the commands and potential output are shown below. For this example, the included *test\_batch/* will be used as the input batch, the output will be the included *results/* folder and a frame gap of 3 frames will be used. This process will take a few minutes to complete.
+In order to then perform segmentation on this batch, the commands and potential output are shown below. For this example, the included *test\_batch/* will be used as the input batch, the output directory will be generatedd automatically, and a frame gap of 3 frames will be used. This process will take a few minutes to complete.
 ```
 $ cd ISS_uNLC/
 $ unzip test_batch
@@ -199,7 +198,7 @@ Memory Usage for Sequence: ##.## MB.
 ...
 ...
 ```
-Once the process is complete, the segemtation results will be located in the designated *results/* folder.
+Once the process is complete, the segemtation results will be located in the created *results/* folder.
 
 #### Example (2.) 
 Segment a **short** video that is located at *home/.../vidpath/video.avi* (not included in this repository). No output directory will be specified and a frame gap of 3 will be used. Segmenting directly from a video is not recommended at this time and it is important that the video is short.
