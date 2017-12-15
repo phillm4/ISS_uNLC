@@ -20,19 +20,19 @@ The Majority of the libraries can be installed via pip or conda with the excepti
 ## Installation Instructions
 \noindent The installation instructions mimic those of Pathak’s videoseg, however the installations of Dense CRF, Kernel Temporal Segmentation, and DeepMatching are all neglected. These packages need to be installed if it is desired to run Pathak’s full\_pipe.py script. In addition, several modifications are required in order for functions to work properly. A handful of scripts have been included as an attempt to mitigate any issues.
 
-### 1. Download and install this repository.
+##### 1. Download and install this repository.
 ```Shell
 $ cd [Path where this will be installed]
 $ git clone https://github.com/pathak22/videoseg.git
 ```
-### 2. Download and install NLC. 
+##### 22. Download and install NLC. 
 As this will be used as a python library and consists of a variety of variety of python scripts, a \texttt{\_\_init\_\_.py} file needs to be included.
 ```Shell
 $ cd ISS_uNLC/lib/
 $ git clone https://github.com/pathak22/videoseg.git
 $ cp __init__.py videoseg/
 ```
-### 3.Download and install pyflow.
+##### 3.Download and install pyflow.
 Note that the installation path has changed. Furthermore, it is required to build pyflow as it is a C++ wrapper. 
 ```Shell
 $ cd ISS_uNLC/lib/videoseg/lib/
@@ -40,7 +40,7 @@ $ git clone https://github.com/pathak22/pyflow.git
 $ cd pyflow/
 $ python setup.py build_ext -i
 ```
-### 4. Download and install Visual Saliency. 
+##### 4. Download and install Visual Saliency. 
 Similar to NLC, a \texttt{\_\_init\_\_.py} file needs to be included.
 ```Shell
 $ cd ISS_uNLC/lib/videoseg/lib/
@@ -50,7 +50,7 @@ $ cp __init__.py mr_saliency/
 
 After installing the above dependencies, several modifications are required in order for everything to work properly.
 
-### 5. Fix MR.py issues
+##### 5. Fix MR.py issues
 \texttt{mr\_saliency/MR.py} handles the visual saliency calculation in uNLC. However, the script is not compatible with Python 3 and the current version of scikit-image. In order to fix these issues, `$<>$' needs to be changed to `$!=$' for the `not equal' comparison operator as Python 3 no longer supports `$<>$'. The second change is to remove the importing of \texttt{lena} from the \texttt{skimage.data module}. \texttt{lena} has been removed from scikit-image due to copyright issues. A simple fix, without going through the rest of the script, is to import a different image from the \texttt{skimage.data model} and name that as \texttt{lena}. To make this process simpler, a modified \texttt{MR.py} script is included in this repository and can be swapped for the one in the \texttt{mr\_saliency} library. These are the only required changes for \texttt{mr\_saliency}. The swapping procedure is shown below.
 
 ```Shell
@@ -59,7 +59,7 @@ $ rm lib/mr_saliency/MR.py
 $ mv MR.py lib/mr_saliency/
 ```
 
-### 6. Add iss_uNLC.py
+##### 6. Add iss_uNLC.py
 The last step in the installation process is to move the included \texttt{iss\_uNLC.py} script into the videoseg/lib. \texttt{iss\_uNLC.py} is a modified version of \texttt{videoseq/src/NLC.py} which allows for the tuning of the pyflow parameters. It is intended to update texttt{iss\_uNLC.py} in the future as to remove this step in the installation process.
 ```Shell
 $ cd ISS_uNLC/lib/videoseg/lib/
@@ -175,7 +175,7 @@ No output directory will be specified. A frame gap of 3 is desired. The commands
 
 
 
-\begin{lstlisting}
+```python
 # Parameters for uNLC and pyflow.
 memory_limit = 100 
 resize_fraction = 0.5
@@ -192,4 +192,4 @@ pyflow_parameters = dict(
     nOuterFPIterations = 7,
     nInnerFPIterations = 1,
     nSORIterations = 30)
-\end{lstlisting}
+```
