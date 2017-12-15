@@ -20,7 +20,7 @@ The majority of the software used for this project is from Pathak's [videoseg](h
 
 ### Description of Contents
 | File / Folder         | Description                                                                   |
-| --------------------- |:-----------------------------------------------------------------------------:| 
+| --------------------- |:-----------------------------------------------------------------------------| 
 | additional\_tools     | Contains extra scripts that may be beneficial                                 | 
 | lib                   | Location where all external code will be stored                               |  
 | modified\_scripts     | Contains several scripts that will be swapped or placed into the lib folder   | 
