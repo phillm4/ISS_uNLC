@@ -88,14 +88,14 @@ After installing the above dependencies, several modifications are required for 
 ```
 $ cd ISS_uNLC/
 $ rm lib/videoseg/lib/mr_saliency/MR.py
-$ mv MR.py lib/mr_saliency/
+$ mv  modified_scripts/MR.py lib/videoseg/lib/mr_saliency/
 ```
 
 ##### 6. Add iss_uNLC.py
 The last step in the installation process is to move the included *iss\_uNLC.py* script into *videoseg/lib*. *iss\_uNLC.py* is a modified version of *videoseq/src/NLC.py* which allows for the tuning of the pyflow parameters. It is intended to update *iss\_uNLC.py* in the future as to remove this step in the installation process.
 ```
-$ cd ISS_uNLC/lib/videoseg/lib/
-$ cp iss_uNLC.py lib/mr_saliency/
+$ cd ISS_uNLC/
+$ mv  modified_scripts/iss_uNLC.py /lib/videoseg/src/
 ```
 
 uNLC should be ready to use.
