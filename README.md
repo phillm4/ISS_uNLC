@@ -91,7 +91,7 @@ $ cp modified_scripts/MR_mod.py lib/videoseg/lib/mr_saliency/
 ```
 
 ##### 6. Add nlc\_mod.py
-The last step in the installation process is to move the included *nlc\_mod.py* script into *videoseg/lib*. *inlc\_mod* is a modified version of *videoseq/src/NLC.py* which allows for the tuning of the pyflow parameters. It is intended to update *nlc\_mod* in the future as to remove this step in the installation process and remove additional dependencies.
+The last step in the installation process is to move the included *nlc\_mod.py* script into *videoseg/lib*. *nlc\_mod.py* is a modified version of *videoseq/src/NLC.py* which allows for the tuning of the pyflow parameters. It is intended to update *nlc\_mod.py* in the future as to remove this step in the installation process and remove additional dependencies.
 ```
 $ cd ISS_uNLC/
 $ cp modified_scripts/nlc_mod.py lib/videoseg/src/
