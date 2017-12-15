@@ -8,6 +8,15 @@ Using the methods described in Pathak et al. and Faktor and Irani, pseudo ground
 
 ### Disclaimer
 The majority of the software used for this project is from Pathak's [videoseg](https://github.com/pathak22/videoseg) library. While a handful of modifications and changes were introduced, the software is ultimately under the ownership of Pathak et al., the authors of [Learning Features by Watching Objects Move](http://cs.berkeley.edu/~pathak/unsupervised_video/).
+```
+@inproceedings{pathakCVPR17learning,
+    Author = {Pathak, Deepak and Girshick, Ross and Doll\'{a}r,
+              Piotr and Darrell, Trevor and Hariharan, Bharath},
+    Title = {Learning Features by Watching Objects Move},
+    Booktitle = {Computer Vision and Pattern Recognition ({CVPR})},
+    Year = {2017}
+}
+```
 
 ### Description of Contents
 It is intend in the future to remove the bulk of the dependencies on scikit-image and PIL, and instead use OpenCV exclusively. This process has already been initiated.
