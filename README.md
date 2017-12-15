@@ -206,7 +206,7 @@ The output should mimic that of Example 1.
 
 ### Tuning uNLC
 
-If it is desired to adjust any of the parameters for the uNLC besides the frame gap, these can be modified within *iss\_main.py* under the [iss\_uNLC() function](https://github.com/phillm4/ISS_uNLC/blob/edc62b3c5af0547940d9d7184769de3fcc252631/iss_main.py#L322). 
+If it is desired to adjust any of the parameters for the uNLC algorithm besides the frame gap, these can be modified within *iss\_main.py* under the [iss\_uNLC() function](https://github.com/phillm4/ISS_uNLC/blob/edc62b3c5af0547940d9d7184769de3fcc252631/iss_main.py#L322). 
 
 ```python
 # Parameters for uNLC and pyflow.
