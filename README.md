@@ -89,15 +89,14 @@ After installing the above dependencies, several modifications are required for 
 ```
 $ cd ISS_uNLC/
 $ rm lib/videoseg/lib/mr_saliency/MR.py
-$ mv modified_scripts/MR.py lib/videoseg/lib/mr_saliency/
+$ cp modified_scripts/MR.py lib/videoseg/lib/mr_saliency/
 ```
 
 ##### 6. Add nlc\_mod.py
 The last step in the installation process is to move the included *nlc\_mod.py* script into *videoseg/lib*. *inlc\_mod* is a modified version of *videoseq/src/NLC.py* which allows for the tuning of the pyflow parameters. It is intended to update *nlc\_mod* in the future as to remove this step in the installation process and remove additional dependencies.
 ```
 $ cd ISS_uNLC/
-$ mv modified_scripts/iss_uNLC.py lib/videoseg/src/
-$ rm modified_scripts
+$ cp modified_scripts/iss_uNLC.py lib/videoseg/src/
 ```
 
 uNLC should be ready to use.
