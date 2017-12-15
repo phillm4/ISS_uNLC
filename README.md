@@ -7,7 +7,7 @@ The unsupervised motion-based segmentation algorithm is largely inspired by Fakt
 Using the methods described by Pathak et al. and Faktor and Irani, pseudo ground truth data for instrument shaft segmentations was obtained and evaluated. The installation and use instruction of the software that was used to obtain the presented results is described below.
 
 ### Disclaimer
-The majority of the software used for this project is from Pathak's [videoseg](https://github.com/pathak22/videoseg) library. While a handful of modifications and changes were introduced, the software is ultimately under the ownership of Pathak et al., the authors of [Learning Features by Watching Objects Move](http://cs.berkeley.edu/~pathak/unsupervised_video/).
+The majority of the software used for this project is from Pathak's [videoseg](https://github.com/pathak22/videoseg) library. While a handful of modifications and changes were introduced, the software is ultimately under the ownership of Pathak et al., the authors of [''Learning Features by Watching Objects Move''](http://cs.berkeley.edu/~pathak/unsupervised_video/).
 ```
 @inproceedings{pathakCVPR17learning,
     Author = {Pathak, Deepak and Girshick, Ross and Doll\'{a}r,
