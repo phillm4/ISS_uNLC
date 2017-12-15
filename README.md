@@ -19,7 +19,7 @@ In order to run the python scripts for uNLC, several additional libraries are re
 The Majority of the libraries can be installed via pip or conda with the exception of OpenCV. While the uNLC algorithm does work without the FFmpeg dependencies, it is required if video files are to be read. 
 
 ## Installation Instructions
-The installation instructions mimic those of Pathak’s videoseg, however the installations of Dense CRF, Kernel Temporal Segmentation, and DeepMatching are all neglected. These packages need to be installed if it is desired to run Pathak’s *full_pipe.py* script. In addition, several modifications are required in order for functions to work properly. A handful of scripts have been included as an attempt to mitigate any issues.
+The installation instructions mimic those of Pathak’s videoseg, however the installations of Dense CRF, Kernel Temporal Segmentation, and DeepMatching are all neglected. These packages need to be installed if it is desired to run Pathak’s *full\_pipe.py* script. In addition, several modifications are required in order for functions to work properly. A handful of scripts have been included as an attempt to mitigate any issues.
 
 ##### 1. Download and install this repository.
 ```
@@ -27,7 +27,7 @@ $ cd [Path where this will be installed]
 $ git clone https://github.com/pathak22/videoseg.git
 ```
 ##### 2. Download and install NLC. 
-As this will be used as a python library and consists of a variety of variety of python scripts, a *__init__.py* file needs to be included.
+As this will be used as a python library and consists of a variety of variety of python scripts, a *\_\_init\_\_.py* file needs to be included.
 ```
 $ cd ISS_uNLC/lib/
 $ git clone https://github.com/pathak22/videoseg.git
@@ -44,7 +44,7 @@ $ python setup.py build_ext -i
 ```
 
 ##### 4. Download and install Visual Saliency. 
-Similar to NLC, a *__init__.py* file needs to be included.
+Similar to NLC, a *\_\_init\_\_.py* file needs to be included.
 ```
 $ cd ISS_uNLC/lib/videoseg/lib/
 $ git clone https://github.com/ruanxiang/mr_saliency.git
@@ -54,7 +54,7 @@ $ cp __init__.py mr_saliency/
 After installing the above dependencies, several modifications are required in order for everything to work properly.
 
 ##### 5. Fix MR.py issues
-*mr_saliency/MR.py* handles the visual saliency calculation in uNLC. However, the script is not compatible with Python 3 nor the current version of scikit-image. In order to fix these issues, `<>` needs to be changed to `!=` for the 'not equal' comparison operator. Python 3 no longer supports `<>`. The second change is to remove the importing of `lena` from the skimage.data module. lena has been removed from scikit-image due to copyright issues. A simple fix is to import a different image from the skimage.data module and name that as lena. To make this process simpler, a modified *MR.py* script is included in this repository and can be swapped for the one in the *mr_saliency* library. The swapping procedure is shown below.
+*mr\_saliency/MR.py* handles the visual saliency calculation in uNLC. However, the script is not compatible with Python 3 nor the current version of scikit-image. In order to fix these issues, `<>` needs to be changed to `!=` for the 'not equal' comparison operator. Python 3 no longer supports `<>`. The second change is to remove the importing of `lena` from the skimage.data module. lena has been removed from scikit-image due to copyright issues. A simple fix is to import a different image from the skimage.data module and name that as lena. To make this process simpler, a modified *MR.py* script is included in this repository and can be swapped for the one in the *mr\_saliency* library. The swapping procedure is shown below.
 
 ```
 $ cd ISS_uNLC/
@@ -63,16 +63,16 @@ $ mv MR.py lib/mr_saliency/
 ```
 
 ##### 6. Add iss_uNLC.py
-The last step in the installation process is to move the included *iss_uNLC.py* script into *videoseg/lib*. *iss_uNLC.py* is a modified version of *videoseq/src/NLC.py* which allows for the tuning of the pyflow parameters. It is intended to update *iss_uNLC.py* in the future as to remove this step in the installation process.
+The last step in the installation process is to move the included *iss\_uNLC.py* script into *videoseg/lib*. *iss\_uNLC.py* is a modified version of *videoseq/src/NLC.py* which allows for the tuning of the pyflow parameters. It is intended to update *iss\_uNLC.py* in the future as to remove this step in the installation process.
 ```
 $ cd ISS_uNLC/lib/videoseg/lib/
-$ cp iss\_uNLC.py lib/mr_saliency/
+$ cp iss_uNLC.py lib/mr_saliency/
 ```
 
 uNLC should be ready to use.
 
 ## Usage Instructions
-All operations are handled by *iss_main.py*. As previously indicated, this is the main program to run the uNLC algorithm and is a wrapper around Pathak's nlc algorithm. It is inspired by the NLC library's *run_full.py* and *nlc.py*. The function can be executed from the command line and excepts a variety of arguments. In general, *iss_main.py* requires an input corresponding to the path of either an image directory, a directory containing subfolders with images, or a video. Additional arguments include the ability to adjust the output directory and a frame gap. Use `-h` to view the arguments.
+All operations are handled by *iss\_main.py*. As previously indicated, this is the main program to run the uNLC algorithm and is a wrapper around Pathak's nlc algorithm. It is inspired by the NLC library's *run\_full.py* and *nlc.py*. The function can be executed from the command line and excepts a variety of arguments. In general, *iss\_main.py* requires an input corresponding to the path of either an image directory, a directory containing subfolders with images, or a video. Additional arguments include the ability to adjust the output directory and a frame gap. Use `-h` to view the arguments.
 
 ```
 $ cd ISS_uNLC/
@@ -158,9 +158,9 @@ Memory Usage for Sequence: 24.58 MB.
 ...
 ```
 
-Once the process is complete (it may take several minutes depending on the length of the video), two new folders *src_images/* and *results/* should have been created where the video is located. One contains the frames from the video (*src_images/*), the other contains the segmentation results (*results/*). It is not recommend to use a video that is longer than 30 seconds.
+Once the process is complete (it may take several minutes depending on the length of the video), two new folders *src\_images/* and *results/* should have been created where the video is located. One contains the frames from the video (*src\_images/*), the other contains the segmentation results (*results/*). It is not recommend to use a video that is longer than 30 seconds.
 
-Example 2.) Perform segmentation using the `-batch` input. In the context of the *iss_uNLC.py* script, this option is to be selected if there is a folder, containing several subfolders which contain images. This is illustrated below.
+Example 2.) Perform segmentation using the `-batch` input. In the context of the *iss\_uNLC.py* script, this option is to be selected if there is a folder, containing several subfolders which contain images. This is illustrated below.
 ```
 - batch_folder/
 -- image_directory_00/
