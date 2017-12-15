@@ -27,9 +27,9 @@ import os
 import sys
 import time
 
-# import _init_nlc_path
-# import videoseg.src.nlc as uNLC
-# import videoseg.src.utils as utils
+import _init_nlc_path
+import videoseg.src.iss_uNLC as uNLC
+import videoseg.src.utils as utils
 
 
 def directory_valid(directory):
@@ -322,8 +322,16 @@ def iss_uNLC(img_directory,out_directory,frame_gap,batch_number):
             and segmented images are saved to the out_directory.  
     """
 
-    # Parameters for uNLC and pyflow.
-    memory_limit = 100 
+    ## # Parameters for uNLC and pyflow.
+    # memory_limit - Memory limit of image sequence for numpy array. 
+    # resize_fraction -  Fraction that image will be resized by.
+    # max_superpixels - Total number of superpixel regions.
+    # vote_iterations - Number of times to perform consensus voting. 
+    # segmentation_energy_threshold - Threshold for finding foreground objects.
+    # relative_energy - Remove objects where: 
+    #   (total energy <= relative_energy * foreground_pixel_size) 
+
+    memory_limit = 100
     resize_fraction = 0.5
     max_superpixels = 1000
     vote_iterations = 100
@@ -362,7 +370,6 @@ def iss_uNLC(img_directory,out_directory,frame_gap,batch_number):
     if sequence_memory > memory_limit:
         print('*****Warning: Image sequence may be too large!*****\n'
             'Consider changing the sequence parameters.')
-
     
     print('\n*****Performing uNLC*****\n')
     uNLC_sequence = uNLC.nlc(image_sequence, maxsp=max_superpixels, 
@@ -424,9 +431,8 @@ def main():
 
     # Iterate through the given image subdirectories and perform the 
     # uNLC segmentation. Save results to the output directory. 
-    # for i, batch_subset in enumerate(batch):
-    #     iss_uNLC(batch_subset,out_directory,frame_gap,i)
-
+    for i, batch_subset in enumerate(batch):
+        iss_uNLC(batch_subset,out_directory,frame_gap,i)
 
 if __name__ == "__main__":
     main()
