@@ -35,7 +35,7 @@ from scipy.signal import convolve2d
 import time
 import utils
 import _init_paths  # noqa
-from mr_saliency import MR
+from mr_saliency import MR_mod as MR
 import pyflow
 
 
@@ -307,7 +307,7 @@ def compute_saliency(imSeq, pyflow_parameters=False, flowSz=100, flowBdd=12.5, f
     """
 
     def isDominant(flow, flowMagTh, flowDirTh, dirBins=10):
-         """
+        """
         Look for frames where the dominant motion is close to zero. 
         First, check if the median of the optical flow magnitude is 
         below a certain threshold, denoted as flow_magnitude_thresh.
