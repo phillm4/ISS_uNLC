@@ -1,3 +1,11 @@
+# Instrument Shaft Segmentation using Unsupervised Non-local Consensus Voting
+
+Instrument shaft segmentation for surgical robotic images was performed using the methods described in Pathak et al.’s 2017 Conference on Computer Vision and Pattern Recognition (CVPR) paper, [''Learning Features by Watching Objects Move''](http://cs.berkeley.edu/~pathak/unsupervised_video/). In particular, pseudo ground truth data for instrument segmentation was generated using the [unsupervised motion-based segmentation algorithm](https://github.com/pathak22/videoseg) presented in section 5.1 of Pathak et al. Convolutional neural networks (CNNs) trained from pseudo ground truth data have been shown to outperform the leading unsupervised methods for object detection. It is desired that the obtained pseudo ground truth data for instrument segmentation will be used to train Fully Convolutional Networks (FCNs) to perform semantic segmentation. 
+
+The unsupervised motion-based segmentation algorithm is largely inspired by Faktor and Irani’s 2014 British Machine Vision Conference (BMVC) paper, [''Video Segmentation by Non-Local Consensus Voting''](http://www.wisdom.weizmann.ac.il/~vision/NonLocalVideoSegmentation.html). Pathak et al.’s algorithm, denoted as uNLC, differs from Faktor and Irani’s algorithm, denoted as NLC, as uNLC substitutes a trained edge detector for an unsupervised superpixel generator. 
+
+Using the methods described in Pathak et al. and Faktor and Irani, pseudo ground truth data for instrument shaft segmentations was obtained and evaluated. The installation and usage instructions of the software that was used to obtain the presented results is described below.
+
 ## Disclaimer
 The majority of the software used for this project is from Pathak's [videoseg](https://github.com/pathak22/videoseg) library. While a handful of modifications and changes were introduced, the software is ultimately under the ownership of Pathak et al., the authors of [Learning Features by Watching Objects Move](http://cs.berkeley.edu/~pathak/unsupervised_video/).
 
