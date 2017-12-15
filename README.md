@@ -73,7 +73,7 @@ $ python setup.py build_ext -i
 ```
 
 ##### 4. Download and install Visual Saliency. 
-Similar to NLC, a *\_\_init\_\_.py* file needs to be included. Note the the installation path.
+Similar to NLC, a *\_\_init\_\_.py* file needs to be included. Note the installation path.
 ```
 $ cd ISS_uNLC/lib/videoseg/lib/
 $ git clone https://github.com/ruanxiang/mr_saliency.git
