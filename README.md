@@ -225,22 +225,30 @@ Once the process is complete (it may take several minutes depending on the lengt
 If it is desired to adjust any of the parameters for the uNLC algorithm besides the frame gap, these can be modified within *iss\_main.py* under the [iss\_uNLC() function](https://github.com/phillm4/ISS_uNLC/blob/edc62b3c5af0547940d9d7184769de3fcc252631/iss_main.py#L322). 
 
 ```python
-# Parameters for uNLC and pyflow.
-memory_limit = 100
-resize_fraction = 0.5
-max_superpixels = 1000
-vote_iterations = 100
-segmentation_energy_threshold = 0.3
-relative_energy = segmentation_energy_threshold - 0.1 
-clearVoteBlobs = False  
-clearFinalBlobs = True
-pyflow_parameters = dict(
-    alpha = 0.012,
-    ratio = 0.75,
-    minWidth = 20,
-    nOuterFPIterations = 7,
-    nInnerFPIterations = 1,
-    nSORIterations = 30)
+    ## # Parameters for uNLC and pyflow.
+    # memory_limit - Memory limit of image sequence for numpy array. 
+    # resize_fraction -  Fraction that image will be resized by.
+    # max_superpixels - Total number of superpixel regions.
+    # vote_iterations - Number of times to perform consensus voting. 
+    # segmentation_energy_threshold - Threshold for finding foreground objects.
+    # relative_energy - Remove objects where: 
+    #   (total energy <= relative_energy * foreground_pixel_size) 
+
+    memory_limit = 100
+    resize_fraction = 0.5
+    max_superpixels = 1000
+    vote_iterations = 100
+    segmentation_energy_threshold = 0.3
+    relative_energy = segmentation_energy_threshold - 0.1 
+    clearVoteBlobs = False  
+    clearFinalBlobs = True
+    pyflow_parameters = dict(
+        alpha = 0.012,
+        ratio = 0.75,
+        minWidth = 20,
+        nOuterFPIterations = 7,
+        nInnerFPIterations = 1,
+        nSORIterations = 30)
 ```
 
 ### Next Steps
