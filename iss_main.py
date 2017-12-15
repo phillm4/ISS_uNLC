@@ -124,15 +124,18 @@ def make_directory(new_directory):
             raise 
 
 
-def convert_video(vid_path,save_frames):
+def convert_video(vid_path,save_frames,images_per_batch):
     """
     Convert a video file to a directory of images. Can specify the 
-    number of frames between each recorded image. 
+    number of frames between each recorded image. The converted 
+    images are stored in a series of directories. 
     INPUT:  vid_path - Path to video file including the video file 
             itself.
             save_frames - Specifies the frames to save. Is like a 
             frame gap. However a value of 1 will save every frame, 2
-            will save every other, 3 saves every third frame, etc.  
+            will save every other, 3 saves every third frame, etc. 
+            images_per_batch - Number of images to be saved in each 
+            batch. 
     OUTPUT: vid_dir - Path to where the video is stored. This is not 
             the path to the video file itself. It is the folder the 
             video is located in.
@@ -164,7 +167,7 @@ def convert_video(vid_path,save_frames):
         
         if ((notdone and (i-start_frame)%(save_frames) == 0) or 
             (notdone and i == start_frame)):
-            sub_save_dir = '/' + str(i//100).zfill(2)
+            sub_save_dir = '/' + str(i//images_per_batch).zfill(2)
 
             make_directory(save_dir+sub_save_dir)
     
@@ -207,7 +210,7 @@ def initialize_batch(img_directory,batch_directory,vid_path):
         
         if vid_path:
             vid_path = os.path.abspath(vid_path)
-            vid_directory, batch_directory = convert_video(vid_path,1)
+            vid_directory, batch_directory = convert_video(vid_path,1,100)
         
         batch_directory = os.path.abspath(batch_directory)
         batch = os.listdir(batch_directory)
