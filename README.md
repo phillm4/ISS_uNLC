@@ -31,15 +31,15 @@ The majority of the software used for this project is from Pathak's [videoseg](h
 It is intend in the future to remove the bulk of the dependencies on scikit-image and PIL, and instead use OpenCV exclusively. This process has already been initiated.
 
 ### Required Libraries and Additional Dependencies
-In order to run the python scripts for uNLC, several additional libraries are required. One of the required libraries is pyflow. Pyflow is a wrapper around [Ce Liu's C++ implementation of Coarse2Fine Optical Flow](http://people.csail.mit.edu/celiu/OpticalFlow/), and the python wrapper utilizes the python package Cython. Cython consists of C-extensions for Python. When attempting to build the pyflow library on a windows machine, "error: Unable to find vcvarsall.bat" was encountered. This appears to be a common error due to Visual Studio. As a result, all work was completed on an Ubuntu 16.04 LTS system.  
+In order to run the python scripts for uNLC, several additional libraries are required. One of the required libraries is pyflow. Pyflow is a wrapper around [Ce Liu's C++ implementation of Coarse2Fine Optical Flow](http://people.csail.mit.edu/celiu/OpticalFlow/), and utilizes the python package Cython. Cython consists of C-extensions for Python. When attempting to build the pyflow library on a windows machine, "error: Unable to find vcvarsall.bat" was encountered. This appears to be a common error due to Visual Studio. As a result, all work was completed on an Ubuntu 16.04 LTS system. Additional libraries include the following:
 
 ```
-  cv2
-  Cython
-  numpy
-  PIL
-  scipy
-  scikit-image
+    OpenCV3 - cv2
+    Cython
+    numpy
+    Python Imaging Library - PIL
+    scipy
+    scikit-image - skimage
 ```
 
 The majority of the libraries can be installed via pip or conda with the exception of OpenCV. While the uNLC algorithm does work without the FFmpeg dependencies, it is required if video files are to be read. If it is not desired to work with videos, the pip or conda installation of OpenCV should work. 
