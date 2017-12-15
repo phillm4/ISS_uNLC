@@ -4,7 +4,7 @@ Instrument shaft segmentation for surgical robotic images was performed using th
 
 The unsupervised motion-based segmentation algorithm is largely inspired by Faktor and Irani’s 2014 British Machine Vision Conference (BMVC) paper, [''Video Segmentation by Non-Local Consensus Voting''](http://www.wisdom.weizmann.ac.il/~vision/NonLocalVideoSegmentation.html). Pathak et al.’s algorithm, denoted as uNLC, differs from Faktor and Irani’s algorithm, denoted as NLC, as uNLC substitutes a trained edge detector for an unsupervised superpixel generator. 
 
-Using the methods described in Pathak et al. and Faktor and Irani, pseudo ground truth data for instrument shaft segmentations was obtained and evaluated. The installation and usage instructions of the software that was used to obtain the presented results is described below.
+Using the methods described in Pathak et al. and Faktor and Irani, pseudo ground truth data for instrument shaft segmentations was obtained and evaluated. The installation and use instruction of the software that was used to obtain the presented results is described below.
 
 ### Disclaimer
 The majority of the software used for this project is from Pathak's [videoseg](https://github.com/pathak22/videoseg) library. While a handful of modifications and changes were introduced, the software is ultimately under the ownership of Pathak et al., the authors of [Learning Features by Watching Objects Move](http://cs.berkeley.edu/~pathak/unsupervised_video/).
@@ -19,6 +19,15 @@ The majority of the software used for this project is from Pathak's [videoseg](h
 ```
 
 ### Description of Contents
+| File / Folder         | Description                                                                   |
+| --------------------- |:-----------------------------------------------------------------------------:| 
+| additional\_tools     | Contains extra scripts that may be beneficial                                 | 
+| lib                   | Location where all external code will be stored                               |  
+| modified\_scripts     | Contains several scripts that will be swapped or placed into the lib folder   | 
+| \_init\_nlc\_path.py  | Script which initializes library paths for *iss\_main.py*                     |
+| iss\_main.py          | Program to initiate uNLC algorithm                                            |
+| test\_batch.zip       | Zipped folder containing test images for the program demo                     |
+
 It is intend in the future to remove the bulk of the dependencies on scikit-image and PIL, and instead use OpenCV exclusively. This process has already been initiated.
 
 ### Required Libraries and Additional Dependencies
