@@ -148,7 +148,7 @@ In order to then perform segmentation on this batch, the commands and potential 
 $ cd ISS_uNLC/
 $ unzip test_batch
 $ rm test_batch.zip
-$ python iss_main.py -batch test_batch -out results -fgap 2
+$ python iss_main.py -batch test_batch -fgap 2
 
 Batch:  0
 Input Directory:  /home/.../ISS_uNLC/test_batch/00
