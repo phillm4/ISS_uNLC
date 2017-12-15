@@ -87,7 +87,7 @@ After installing the above dependencies, several modifications are required for 
 
 ```
 $ cd ISS_uNLC/
-$ rm lib/mr_saliency/MR.py
+$ rm lib/videoseg/lib/mr_saliency/MR.py
 $ mv MR.py lib/mr_saliency/
 ```
 
