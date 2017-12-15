@@ -48,7 +48,7 @@ The majority of the libraries can be installed via pip or conda with the excepti
 The installation instructions mimic those of Pathak’s videoseg, however the installations of Dense CRF, Kernel Temporal Segmentation, and DeepMatching are all neglected. These packages need to be installed if it is desired to run Pathak’s *full\_pipe.py* script. In addition, several modifications are required in order for functions to work properly. A handful of scripts have been included as an attempt to mitigate these issues.
 
 ##### Notation.
-Throughout the installation procedure, the bulk of the user path will be omitted. For example, `/home/user/path/$    ` will be refered to as `$    `, and commands like, `$ cd /home/user/path/ISS_uNLC/lib/ ` will be indicated by `$ cd ISS_uNLC/lib/ `.
+Throughout the installation procedure, the bulk of the user path will be omitted. For example, `/home/user/path/$    ` will be refereed to as `$    `, and commands like, `$ cd /home/user/path/ISS_uNLC/lib/ ` will be indicated by `$ cd ISS_uNLC/lib/ `.
 
 ##### 1. Download and install this repository.
 ```
