@@ -214,7 +214,7 @@ Output Directory:  /home/.../vidpath/results
 ```
 The output should mimic that of Example 1. 
 
-Once the process is complete (it may take several minutes depending on the length of the image sequence), two new folders *src\_images/* and *results/* should have been created where the video is located. One contains the frames from the video (*src\_images/*), the other contains the segmentation results (*results/*). It is not recommend to use a video that is longer than 30 seconds. The size of the batches created by the video to image conversion can be edited [here]().
+Once the process is complete (it may take several minutes depending on the length of the image sequence), two new folders *src\_images/* and *results/* should have been created where the video is located. One contains the frames from the video (*src\_images/*), the other contains the segmentation results (*results/*). It is not recommend to use a video that is longer than 30 seconds. The size of the batches created by the video to image conversion is denoted as [*images\_per\_batch*](https://github.com/phillm4/ISS_uNLC/blob/5b7681b837a87745ed8e648dbedb0fa881e181db/iss_main.py#L213).
 
 ### Tuning uNLC
 
