@@ -7,6 +7,11 @@ Disclaimer: This script is a modification of Pathak's nlc.py script.
 This implementation is intended to provide further clarification 
 and provide information referring back to the journal articles where 
 the algorithm originated from.
+
+References: 
+[1] - Pathak et al., Learning Features by Watching Objects Move, 2017.
+[2] - Faktor and Irani, Video Segmentation by Non-Local Consensus 
+Voting, 2014
 **********************************************************************
 """
 
