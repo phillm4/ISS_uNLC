@@ -143,7 +143,7 @@ Perform segmentation using the `-batch` input. In the context of *iss\_main.py*,
 --- ...
 -- ...
 ```
-In order to then perform segmentation on this batch, the commands and potential output are shown below. For this example, the included *test\_batch/* will be used as the input batch, the output directory will be generated automatically, and a frame gap of 3 frames will be used. This process will take a few minutes to complete.
+In order to then perform segmentation on this batch, the commands and potential output are shown below. For this example, the included *test\_batch/* will be used as the input batch, the output directory will be generated automatically, and a frame gap of 3 frames will be used. This process will take several minutes to complete.
 ```
 $ cd ISS_uNLC/
 $ unzip test_batch
