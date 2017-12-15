@@ -4,7 +4,7 @@ Instrument shaft segmentation for surgical robotic images was performed using th
 
 The unsupervised motion-based segmentation algorithm is largely inspired by Faktor and Irani’s 2014 British Machine Vision Conference (BMVC) paper, [''Video Segmentation by Non-Local Consensus Voting''](http://www.wisdom.weizmann.ac.il/~vision/NonLocalVideoSegmentation.html). Pathak et al.’s algorithm, denoted as uNLC, differs from Faktor and Irani’s algorithm, denoted as NLC, as uNLC substitutes a trained edge detector for an unsupervised superpixel generator. 
 
-Using the methods described in Pathak et al. and Faktor and Irani, pseudo ground truth data for instrument shaft segmentations was obtained and evaluated. The installation and use instruction of the software that was used to obtain the presented results is described below.
+Using the methods described by Pathak et al. and Faktor and Irani, pseudo ground truth data for instrument shaft segmentations was obtained and evaluated. The installation and use instruction of the software that was used to obtain the presented results is described below.
 
 ### Disclaimer
 The majority of the software used for this project is from Pathak's [videoseg](https://github.com/pathak22/videoseg) library. While a handful of modifications and changes were introduced, the software is ultimately under the ownership of Pathak et al., the authors of [Learning Features by Watching Objects Move](http://cs.berkeley.edu/~pathak/unsupervised_video/).
@@ -42,10 +42,13 @@ In order to run the python scripts for uNLC, several additional libraries are re
   scikit-image
 ```
 
-The Majority of the libraries can be installed via pip or conda with the exception of OpenCV. While the uNLC algorithm does work without the FFmpeg dependencies, it is required if video files are to be read. 
+The Majority of the libraries can be installed via pip or conda with the exception of OpenCV. While the uNLC algorithm does work without the FFmpeg dependencies, it is required if video files are to be read. If it is not desired to work with videos, the pip or conda installation of OpenCV should work. 
 
 ### Installation Instructions
-The installation instructions mimic those of Pathak’s videoseg, however the installations of Dense CRF, Kernel Temporal Segmentation, and DeepMatching are all neglected. These packages need to be installed if it is desired to run Pathak’s *full\_pipe.py* script. In addition, several modifications are required in order for functions to work properly. A handful of scripts have been included as an attempt to mitigate any issues.
+The installation instructions mimic those of Pathak’s videoseg, however the installations of Dense CRF, Kernel Temporal Segmentation, and DeepMatching are all neglected. These packages need to be installed if it is desired to run Pathak’s *full\_pipe.py* script. In addition, several modifications are required in order for functions to work properly. A handful of scripts have been included as an attempt to mitigate these issues.
+
+##### Notation.
+Throughout the installation procedure, the bulk of the user path will be omitted. For example, `/home/user/path/$    ` will be refered to as `$    `, and commands like, `$ cd /home/user/path/ISS_uNLC/lib/ ` will be indicated by `$ cd ISS_uNLC/lib/ `.
 
 ##### 1. Download and install this repository.
 ```
@@ -53,7 +56,7 @@ $ cd [Path where this will be installed]
 $ git clone https://github.com/pathak22/videoseg.git
 ```
 ##### 2. Download and install NLC. 
-As this will be used as a python library and consists of a variety of variety of python scripts, a *\_\_init\_\_.py* file needs to be included.
+As this will be used as a python library, a *\_\_init\_\_.py* file needs to be included.
 ```
 $ cd ISS_uNLC/lib/
 $ git clone https://github.com/pathak22/videoseg.git
@@ -70,17 +73,17 @@ $ python setup.py build_ext -i
 ```
 
 ##### 4. Download and install Visual Saliency. 
-Similar to NLC, a *\_\_init\_\_.py* file needs to be included.
+Similar to NLC, a *\_\_init\_\_.py* file needs to be included. Note the the installation path.
 ```
 $ cd ISS_uNLC/lib/videoseg/lib/
 $ git clone https://github.com/ruanxiang/mr_saliency.git
 $ cp __init__.py mr_saliency/
 ```
 
-After installing the above dependencies, several modifications are required in order for everything to work properly.
+After installing the above dependencies, several modifications are required for everything to work properly.
 
 ##### 5. Fix MR.py issues
-*mr\_saliency/MR.py* handles the visual saliency calculation in uNLC. However, the script is not compatible with Python 3 nor the current version of scikit-image. In order to fix these issues, `<>` needs to be changed to `!=` for the 'not equal' comparison operator. Python 3 no longer supports `<>`. The second change is to remove the importing of `lena` from the skimage.data module. lena has been removed from scikit-image due to copyright issues. A simple fix is to import a different image from the skimage.data module and name that as lena. To make this process simpler, a modified *MR.py* script is included in this repository and can be swapped for the one in the *mr\_saliency* library. The swapping procedure is shown below.
+*mr\_saliency/MR.py* handles the visual saliency calculation in uNLC. However, the script is not compatible with Python 3 nor the current version of scikit-image. In order to fix these issues, `<>` needs to be changed to `!=`. Python 3 no longer supports `<>` as a comparision operator. The second change is to remove the importing of `lena` from the skimage.data module. lena has been removed from scikit-image due to copyright issues. A simple fix is to import a different image from the skimage.data module and name that as lena. To make this process simpler, a modified *MR.py* script is included in this repository and can be swapped for the one in the *mr\_saliency* library. The swapping procedure is shown below.
 
 ```
 $ cd ISS_uNLC/
@@ -98,7 +101,7 @@ $ cp iss_uNLC.py lib/mr_saliency/
 uNLC should be ready to use.
 
 ### Usage Instructions
-All operations are handled by *iss\_main.py*. As previously indicated, this is the main program to run the uNLC algorithm and is a wrapper around Pathak's nlc algorithm. It is inspired by the NLC library's *run\_full.py* and *nlc.py*. The function can be executed from the command line and excepts a variety of arguments. In general, *iss\_main.py* requires an input corresponding to the path of either an image directory, a directory containing subfolders with images, or a video. Additional arguments include the ability to adjust the output directory and a frame gap. Use `-h` to view the arguments.
+All operations are handled by *iss\_main.py*. This is the main program to run the uNLC algorithm and is a wrapper around Pathak's nlc algorithm. It is inspired by the NLC library's *run\_full.py* and *nlc.py*. The function can be executed from the command line and excepts a variety of arguments. In general, *iss\_main.py* requires an input corresponding to the path of either an image directory, a directory containing subfolders with images, or a video. Additional arguments include the ability to adjust the output directory and a frame gap. Use `-h` to view the arguments.
 
 ```
 $ cd ISS_uNLC/
@@ -125,23 +128,23 @@ optional arguments:
   -fgap FGAP      Frame gap between images in a sequence. Default 0.
 ```
 
-Note that there are three different methods for inputing data and two additional arguments which correspond to an output directory a frame gap. The frame gap is important when specifying the frames that uNLC is to compute across in a given image sequence. If a frame gap too small is chosen, memory errors may occur and the computation may take a long time. When using uNLC, it is important to be aware of the length of image sequences and the frame gap as to prevent memory issues. If a frame gap too large is chosen, the obtained results will be useless. Furthermore, uNLC works best on image sequences where there is significant motion by the foreground objects. If the objects are barely moving, or move relatively slow, it may be beneficial to increase the frame gap. The output directory is where the segmented images will be saved. If this is not specified, a results directory will be created at the same level of any given input. Two examples of use are shown below.
+Note that there are three different methods for inputing data and two additional arguments which correspond to an output directory a frame gap. The frame gap is important when specifying the frames that uNLC is to compute across in a given image sequence. If a frame gap too small is chosen, memory errors may occur and the computation may take a long time (up to an hour). When using uNLC, it is important to be aware of the length of image sequences and the frame gap as to prevent memory issues. If a frame gap too large is chosen, the obtained results will be useless. Furthermore, uNLC works best on image sequences where there is significant motion by the foreground objects. If the objects are barely moving, or move relatively slow, it may be beneficial to increase the frame gap. The output directory is where the segmented images will be saved. If this is not specified, a results directory will be created at the same level of any given input. Two examples are shown below.
 
 #### Example (1.) 
-Perform segmentation using the `-batch` input. In the context of the *iss\_uNLC.py* script, this option is to be selected if there is a folder that contains several subfolders, each of which contain images. This is illustrated below.
+Perform segmentation using the `-batch` input. In the context of *iss\_main.py*, this option is to be selected if there is a folder that contains several subfolders, each of which that contains images. This is illustrated below.
 ```
 - batch_folder/
 -- image_directory_00/
---- img_00_00
---- img_00_01
+--- img_00_00.jpg
+--- img_00_01.jpg
 --- ...
 -- image_directory_01/
---- img_01_00
---- img_01_01
+--- img_01_00.jpg
+--- img_01_01.jpg
 --- ...
 -- ...
 ```
-In order to then perform segmentation on this batch, the commands and potential output will mirror those from Example 1. For this example, the included *test\_batch/* will be used as the input batch, the output will be the included *results/* folder. A frame gap of 2 frames will be used. 
+In order to then perform segmentation on this batch, the commands and potential output are shown below. For this example, the included *test\_batch/* will be used as the input batch, the output will be the included *results/* folder and a frame gap of 2 frames will be used. 
 ```
 $ cd ISS_uNLC/
 $ python iss_main.py -batch test_batch -out results -fgap 2
@@ -152,7 +155,6 @@ Output Directory:  /home/.../ISS_uNLC/results
 Loading images: [ ##.# %]
 Total Sequence Shape:  (25, 512, 640, 3)
 Memory Usage for Sequence: 24.58 MB.
-24576000
 
 *****Performing uNLC*****
 
@@ -192,13 +194,13 @@ Output Directory:  /home/.../vidpath/results
 Loading images: [ ##.# %]
 Total Sequence Shape:  (25, 512, 640, 3)
 Memory Usage for Sequence: 24.58 MB.
-24576000
 ...
 ...
 ```
+Once the process is complete, the segemtation results will be located in the designated *results/* folder.
 
 #### Example (2.) 
-Segment a **short** video that is located at *home/.../vidpath/video.avi*. No output directory will be specified. A frame gap of 3 is desired. The commands and potential output should then be similar to the following. In general, segmenting directly from a video is not recommended at this time. It is important that the video is short.
+Segment a **short** video that is located at *home/.../vidpath/video.avi* (not included in this repository). No output directory will be specified and a frame gap of 3 will be used. Segmenting directly from a video is not recommended at this time and it is important that the video is short.
 ```
 $ cd ISS_uNLC/
 $ python iss_main.py -vid home/.../vidpath/video.avi -fgap 3
@@ -236,3 +238,6 @@ pyflow_parameters = dict(
     nInnerFPIterations = 1,
     nSORIterations = 30)
 ```
+
+### Next Steps
+This concludes the installation and use instructions for uNLC for instrument segmentation. Several changes to the algorithm are planned for the future and it is intended to use the generated results to train a Fully Convolutional Network to perform instrument shaft segmentation. Additional scripts including a pytorch example and a slic superpixel demo can be found in the *additional\_tools* directory. 
