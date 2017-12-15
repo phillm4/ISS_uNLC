@@ -53,7 +53,7 @@ Throughout the installation procedure, the bulk of the user path will be omitted
 ##### 1. Download and install this repository.
 ```
 $ cd [Path where this will be installed]
-$ git clone https://github.com/pathak22/videoseg.git
+$ git clone https://github.com/phillm4/ISS_uNLC.git
 ```
 ##### 2. Download and install NLC. 
 As this will be used as a python library, a *\_\_init\_\_.py* file needs to be included.
