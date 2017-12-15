@@ -4,7 +4,7 @@ Instrument shaft segmentation for surgical robotic images was performed using th
 
 The unsupervised motion-based segmentation algorithm is largely inspired by Faktor and Irani’s 2014 British Machine Vision Conference (BMVC) paper, [''Video Segmentation by Non-Local Consensus Voting''](http://www.wisdom.weizmann.ac.il/~vision/NonLocalVideoSegmentation.html). Pathak et al.’s algorithm, denoted as uNLC, differs from Faktor and Irani’s algorithm, denoted as NLC, as uNLC substitutes a trained edge detector for an unsupervised superpixel generator. 
 
-Using the methods described by Pathak et al. and Faktor and Irani, pseudo ground truth data for instrument shaft segmentations was obtained and evaluated. The installation and use instruction of the software that was used to obtain the presented results is described below.
+Using the methods described by Pathak et al. and Faktor and Irani, pseudo ground truth data for instrument shaft segmentations was obtained and evaluated. The installation process and instructions on using the software is described below.
 
 ### Disclaimer
 The majority of the software used for this project is from Pathak's [videoseg](https://github.com/pathak22/videoseg) library. While a handful of modifications and changes were introduced, the software is ultimately under the ownership of Pathak et al., the authors of [''Learning Features by Watching Objects Move''](http://cs.berkeley.edu/~pathak/unsupervised_video/).
@@ -31,7 +31,7 @@ The majority of the software used for this project is from Pathak's [videoseg](h
 It is intend in the future to remove the bulk of the dependencies on scikit-image and PIL, and instead use OpenCV exclusively. This process has already been initiated.
 
 ### Required Libraries and Additional Dependencies
-In order to run the python scripts for uNLC, several additional libraries are required. One of the required libraries if pyflow. Pyflow is a wrapper around [Ce Liu's C++ implementation of Coarse2Fine Optical Flow](http://people.csail.mit.edu/celiu/OpticalFlow/), and the python wrapper utilizes the python package Cython. Cython consists of C-extensions for Python. When attempting to build the pyflow library on a windows machine, "error: Unable to find vcvarsall.bat" was encountered. This appears to be a common error due to Visual Studio. As a result, all work was completed on an Ubuntu 16.04 LTS system.  
+In order to run the python scripts for uNLC, several additional libraries are required. One of the required libraries is pyflow. Pyflow is a wrapper around [Ce Liu's C++ implementation of Coarse2Fine Optical Flow](http://people.csail.mit.edu/celiu/OpticalFlow/), and the python wrapper utilizes the python package Cython. Cython consists of C-extensions for Python. When attempting to build the pyflow library on a windows machine, "error: Unable to find vcvarsall.bat" was encountered. This appears to be a common error due to Visual Studio. As a result, all work was completed on an Ubuntu 16.04 LTS system.  
 
 ```
   cv2
