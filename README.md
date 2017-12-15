@@ -53,7 +53,7 @@ Throughout the installation procedure, the bulk of the user path will be omitted
 ##### 1. Download and install this repository.
 ```
 $ cd [Path where this will be installed]
-$ git clone https://github.com/pathak22/videoseg.git
+$ git clone https://github.com/phillm4/ISS_uNLC.git
 ```
 ##### 2. Download and install NLC. 
 As this will be used as a python library, a *\_\_init\_\_.py* file needs to be included.
@@ -73,7 +73,7 @@ $ python setup.py build_ext -i
 ```
 
 ##### 4. Download and install Visual Saliency. 
-Similar to NLC, a *\_\_init\_\_.py* file needs to be included. Note the the installation path.
+Similar to NLC, a *\_\_init\_\_.py* file needs to be included. Note the installation path.
 ```
 $ cd ISS_uNLC/lib/videoseg/lib/
 $ git clone https://github.com/ruanxiang/mr_saliency.git
@@ -87,15 +87,15 @@ After installing the above dependencies, several modifications are required for 
 
 ```
 $ cd ISS_uNLC/
-$ rm lib/mr_saliency/MR.py
-$ mv MR.py lib/mr_saliency/
+$ rm lib/videoseg/lib/mr_saliency/MR.py
+$ mv modified_scripts/MR.py lib/videoseg/lib/mr_saliency/
 ```
 
 ##### 6. Add iss_uNLC.py
 The last step in the installation process is to move the included *iss\_uNLC.py* script into *videoseg/lib*. *iss\_uNLC.py* is a modified version of *videoseq/src/NLC.py* which allows for the tuning of the pyflow parameters. It is intended to update *iss\_uNLC.py* in the future as to remove this step in the installation process.
 ```
-$ cd ISS_uNLC/lib/videoseg/lib/
-$ cp iss_uNLC.py lib/mr_saliency/
+$ cd ISS_uNLC/
+$ mv modified_scripts/iss_uNLC.py lib/videoseg/src/
 ```
 
 uNLC should be ready to use.
@@ -147,6 +147,8 @@ Perform segmentation using the `-batch` input. In the context of *iss\_main.py*,
 In order to then perform segmentation on this batch, the commands and potential output are shown below. For this example, the included *test\_batch/* will be used as the input batch, the output will be the included *results/* folder and a frame gap of 2 frames will be used. 
 ```
 $ cd ISS_uNLC/
+$ unzip test_batch
+$ rm test_batch.zip
 $ python iss_main.py -batch test_batch -out results -fgap 2
 
 Batch:  0
