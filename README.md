@@ -196,7 +196,6 @@ Loading images: [ ##.# %]
 Total Sequence Shape:  (##, ###, ###, #)
 Memory Usage for Sequence: ##.## MB.
 ...
-...
 ```
 Once the process is complete, the segmentation results will be located in the created *results/* folder.
 
