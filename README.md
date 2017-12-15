@@ -23,7 +23,7 @@ The majority of the software used for this project is from Pathak's [videoseg](h
 | --------------------- |:------------------------------------------------------------------------------| 
 | additional\_tools     | Contains extra scripts that may be beneficial                                 | 
 | lib                   | Location where all external code will be stored                               |  
-| modified\_scripts     | Contains several scripts that will be placed into the lib folder              | 
+| modified\_scripts     | Contains several scripts that will be placed into external code libraries     | 
 | \_init\_nlc\_path.py  | Script which initializes library paths for *iss\_main.py*                     |
 | iss\_main.py          | Program to initiate uNLC algorithm                                            |
 | test\_batch.zip       | Zipped folder containing test images for the program demo                     |
