@@ -43,7 +43,7 @@ In order to run the python scripts for uNLC, several additional libraries are re
   scikit-image
 ```
 
-The Majority of the libraries can be installed via pip or conda with the exception of OpenCV. While the uNLC algorithm does work without the FFmpeg dependencies, it is required if video files are to be read. If it is not desired to work with videos, the pip or conda installation of OpenCV should work. 
+The majority of the libraries can be installed via pip or conda with the exception of OpenCV. While the uNLC algorithm does work without the FFmpeg dependencies, it is required if video files are to be read. If it is not desired to work with videos, the pip or conda installation of OpenCV should work. 
 
 ### Installation Instructions
 The installation instructions mimic those of Pathak’s videoseg, however the installations of Dense CRF, Kernel Temporal Segmentation, and DeepMatching are all neglected. These packages need to be installed if it is desired to run Pathak’s *full\_pipe.py* script. In addition, several modifications are required in order for functions to work properly. A handful of scripts have been included as an attempt to mitigate these issues.
