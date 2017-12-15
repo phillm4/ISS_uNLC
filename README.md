@@ -83,7 +83,7 @@ $ cp __init__.py mr_saliency/
 After installing the above dependencies, several modifications are required for everything to work properly.
 
 ##### 5. Fix MR.py issues
-*mr\_saliency/MR.py* handles the visual saliency calculation in uNLC. However, the script is not compatible with Python 3 nor the current version of scikit-image. In order to fix these issues, `<>` needs to be changed to `!=`. Python 3 no longer supports `<>` as a comparision operator. The second change is to remove the importing of `lena` from the skimage.data module. lena has been removed from scikit-image due to copyright issues. A simple fix is to import a different image from the skimage.data module and name that as lena. To make this process simpler, a modified *MR.py* script is included in this repository and can be swapped for the one in the *mr\_saliency* library. The swapping procedure is shown below.
+*mr\_saliency/MR.py* handles the visual saliency calculation in uNLC. However, the script is not compatible with Python 3 nor the current version of scikit-image. In order to fix these issues, `<>` needs to be changed to `!=`. Python 3 no longer supports `<>` as a comparison operator. The second change is to remove the importing of `lena` from the skimage.data module. lena has been removed from scikit-image due to copyright issues. A simple fix is to import a different image from the skimage.data module and name that as lena. To make this process simpler, a modified *MR.py* script is included in this repository and can be swapped for the one in the *mr\_saliency* library. The swapping procedure is shown below.
 
 ```
 $ cd ISS_uNLC/
@@ -100,7 +100,7 @@ $ cp modified_scripts/nlc_mod.py lib/videoseg/src/
 uNLC should be ready to use.
 
 ### Usage Instructions
-All operations are handled by *iss\_main.py*. This is the main program to run the uNLC algorithm and is a wrapper around Pathak's nlc algorithm. It is inspired by the NLC library's *run\_full.py* and *nlc.py*. The function can be executed from the command line and excepts a variety of arguments. In general, *iss\_main.py* requires an input corresponding to the path of either an image directory, a directory containing subfolders with images, or a video. Additional arguments include the ability to adjust the output directory and a frame gap. Use `-h` to view the arguments.
+All operations are handled by *iss\_main.py*. This is the main program to run the uNLC algorithm and is a wrapper around Pathak's nlc algorithm. It is inspired by the NLC library's *run\_full.py* and *nlc.py*. The function can be executed from the command line and accepts a variety of arguments. In general, *iss\_main.py* requires an input corresponding to the path of either an image directory, a directory containing subfolders with images, or a video. Additional arguments include the ability to adjust the output directory and a frame gap. Use `-h` to view the arguments.
 
 ```
 $ cd ISS_uNLC/
@@ -122,12 +122,12 @@ optional arguments:
   -batch BATCH    Batch input. Path to a directory that contains sub-folders
                   containing images to test.
   -vid VID        Path to the video file to be converted. Include the video
-                  itself. If inputing a video, the video willbe split into
+                  itself. If inputting a video, the video willbe split into
                   subfolders to conserve memory when running uNLC.
   -fgap FGAP      Frame gap between images in a sequence. Default 0.
 ```
 
-Note that there are three different methods for inputing data and two additional arguments which correspond to an output directory a frame gap. The frame gap is important when specifying the frames that uNLC is to compute across in a given image sequence. If a frame gap too small is chosen, memory errors may occur and the computation may take a long time (up to an hour). When using uNLC, it is important to be aware of the length of image sequences and the frame gap as to prevent memory issues. If a frame gap too large is chosen, the obtained results will be useless. Furthermore, uNLC works best on image sequences where there is significant motion by the foreground objects. If the objects are barely moving, or move relatively slow, it may be beneficial to increase the frame gap. The output directory is where the segmented images will be saved. If this is not specified, a results directory will be created at the same level of any given input. Two examples are shown below.
+Note that there are three different methods for inputting data and two additional arguments which correspond to an output directory a frame gap. The frame gap is important when specifying the frames that uNLC is to compute across in a given image sequence. If a frame gap too small is chosen, memory errors may occur and the computation may take a long time (up to an hour). When using uNLC, it is important to be aware of the length of image sequences and the frame gap as to prevent memory issues. If a frame gap too large is chosen, the obtained results will be useless. Furthermore, uNLC works best on image sequences where there is significant motion by the foreground objects. If the objects are barely moving, or move relatively slow, it may be beneficial to increase the frame gap. The output directory is where the segmented images will be saved. If this is not specified, a results directory will be created at the same level of any given input. Two examples are shown below.
 
 #### Example (1.) 
 Perform segmentation using the `-batch` input. In the context of *iss\_main.py*, this option is to be selected if there is a folder that contains several subfolders, each of which that contains images. This is illustrated below.
@@ -143,7 +143,7 @@ Perform segmentation using the `-batch` input. In the context of *iss\_main.py*,
 --- ...
 -- ...
 ```
-In order to then perform segmentation on this batch, the commands and potential output are shown below. For this example, the included *test\_batch/* will be used as the input batch, the output directory will be generatedd automatically, and a frame gap of 3 frames will be used. This process will take a few minutes to complete.
+In order to then perform segmentation on this batch, the commands and potential output are shown below. For this example, the included *test\_batch/* will be used as the input batch, the output directory will be generated automatically, and a frame gap of 3 frames will be used. This process will take a few minutes to complete.
 ```
 $ cd ISS_uNLC/
 $ unzip test_batch
@@ -198,7 +198,7 @@ Memory Usage for Sequence: ##.## MB.
 ...
 ...
 ```
-Once the process is complete, the segemtation results will be located in the created *results/* folder.
+Once the process is complete, the segmentation results will be located in the created *results/* folder.
 
 #### Example (2.) 
 Segment a **short** video that is located at *home/.../vidpath/video.avi* (not included in this repository). No output directory will be specified and a frame gap of 3 will be used. Segmenting directly from a video is not recommended at this time and it is important that the video is short.
