@@ -74,7 +74,7 @@ uNLC should be ready to use.
 ## Usage Instructions
 All operations are handled by `iss_main.py`. As previously indicated, this is the main program to run the uNLC algorithm and is a wrapper around Pathak's nlc algorithm. It is inspired by the NLC library's `run_full.py` and `nlc.py`. The function can be executed from the command line and excepts a variety of arguments. In general, `iss_main.py` requires an input corresponding to the path of either an image directory, a directory containing subfolders with images, or a video, and accepts additional arguments to adjust the output directory and a frame gap. To view these arguments. 
 
-```Shell
+```
 $ cd ISS_uNLC/
 $ python iss_main.py -h
 
