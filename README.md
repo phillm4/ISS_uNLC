@@ -91,8 +91,8 @@ $ rm lib/videoseg/lib/mr_saliency/MR.py
 $ mv modified_scripts/MR.py lib/videoseg/lib/mr_saliency/
 ```
 
-##### 6. Add iss_uNLC.py
-The last step in the installation process is to move the included *iss\_uNLC.py* script into *videoseg/lib*. *iss\_uNLC.py* is a modified version of *videoseq/src/NLC.py* which allows for the tuning of the pyflow parameters. It is intended to update *iss\_uNLC.py* in the future as to remove this step in the installation process.
+##### 6. Add nlc\_mod.py
+The last step in the installation process is to move the included *nlc\_mod.py* script into *videoseg/lib*. *inlc\_mod* is a modified version of *videoseq/src/NLC.py* which allows for the tuning of the pyflow parameters. It is intended to update *nlc\_mod* in the future as to remove this step in the installation process and remove additional dependencies.
 ```
 $ cd ISS_uNLC/
 $ mv modified_scripts/iss_uNLC.py lib/videoseg/src/
@@ -144,7 +144,7 @@ Perform segmentation using the `-batch` input. In the context of *iss\_main.py*,
 --- ...
 -- ...
 ```
-In order to then perform segmentation on this batch, the commands and potential output are shown below. For this example, the included *test\_batch/* will be used as the input batch, the output will be the included *results/* folder and a frame gap of 2 frames will be used. 
+In order to then perform segmentation on this batch, the commands and potential output are shown below. For this example, the included *test\_batch/* will be used as the input batch, the output will be the included *results/* folder and a frame gap of 3 frames will be used. 
 ```
 $ cd ISS_uNLC/
 $ unzip test_batch
@@ -155,8 +155,8 @@ Batch:  0
 Input Directory:  /home/.../ISS_uNLC/test_batch/00
 Output Directory:  /home/.../ISS_uNLC/results
 Loading images: [ ##.# %]
-Total Sequence Shape:  (25, 512, 640, 3)
-Memory Usage for Sequence: 24.58 MB.
+Total Sequence Shape:  (##, ###, ###, #)
+Memory Usage for Sequence: ##.## MB.
 
 *****Performing uNLC*****
 
@@ -188,14 +188,14 @@ Consensus voting finished: #.## s
 
 *****uNLC complete. Save results.*****
 
-Removing low energy blobs finished: 0.25 s
+Removing low energy blobs finished: #.## s
 
 Batch:  1
 Input Directory:  /home/.../vidpath/src_images/00
 Output Directory:  /home/.../vidpath/results
 Loading images: [ ##.# %]
-Total Sequence Shape:  (25, 512, 640, 3)
-Memory Usage for Sequence: 24.58 MB.
+Total Sequence Shape:  (##, ###, ###, #)
+Memory Usage for Sequence: ##.## MB.
 ...
 ...
 ```
