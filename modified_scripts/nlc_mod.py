@@ -1,181 +1,90 @@
 """
+This file implements following paper:
+Video Segmentation by Non-Local Consensus Voting
+
 **********************************************************************
 Disclaimer: This script is a modification of Pathak's nlc.py script.
 This implementation is intended to provide further clarification 
 and provide information referring back to the journal articles where 
-the algorithm originated from. Furthermore, portions of the script 
-have been slimmed down or modified to utilize the opencv library 
-rather than skimage.
-
-Source:     https://github.com/pathak22/videoseg 
-
-
+the algorithm originated from.
 **********************************************************************
-
-Author:     Mitchell Phillips
-File:       iss_uNLC.py
-Date:       December 2017
-Purpose:    Provide clarification on the methods and functions used
-for the uNLC algorithm. Portions of the algorithm will be refereed 
-back to the corresponding journal article. As Pathak's uNLC is an 
-adaptation of NLC, the majority of the algorithm details can be 
-found in Faktor and Irani's paper.
-
-References: 
-[1] - Pathak et al., Learning Features by Watching Objects Move, 2017.
-[2] - Faktor and Irani, Video Segmentation by Non-Local Consensus 
-Voting, 2014
-
 """
+
 
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-
-import cv2
-import numpy as np
+# from __future__ import unicode_literals
 import os
 import sys
-
 from PIL import Image
+import numpy as np
 from skimage.segmentation import slic
 from skimage.feature import hog
 from skimage import color
-
 from scipy.spatial import KDTree
 from scipy.misc import imresize
 from scipy import ndimage
+# from cv2 import calcOpticalFlowFarneback, OPTFLOW_FARNEBACK_GAUSSIAN
 from scipy.signal import convolve2d
-
 import time
 import utils
 import _init_paths  # noqa
-
 from mr_saliency import MR
 import pyflow
 
 
-
-def my_accumarray(indices, vals, size, func='plus', fill_value=0):
-    """
-    Implementing python equivalent of matlab accumarray.
-    Taken from SDS repo: master/superpixel_representation.py#L36-L46
-        indices: must be a numpy array (any shape)
-        vals: numpy array of same shape as indices or a scalar
-    """
-
-    # get dictionary
-    function_name_dict = {
-        'plus': (np.add, 0.),
-        'minus': (np.subtract, 0.),
-        'times': (np.multiply, 1.),
-        'max': (np.maximum, -np.inf),
-        'min': (np.minimum, np.inf),
-        'and': (np.logical_and, True),
-        'or': (np.logical_or, False)}
-
-    if func not in function_name_dict:
-        raise KeyError('Function name not defined for accumarray')
-    if np.isscalar(vals):
-        if isinstance(indices, tuple):
-            shape = indices[0].shape
-        else:
-            shape = indices.shape
-        vals = np.tile(vals, shape)
-
-    # get the function and the default value
-    (function, value) = function_name_dict[func]
-
-    # create an array to hold things
-    output = np.ndarray(size)
-    output[:] = value
-    function.at(output, indices, vals)
-
-    # also check whether indices have been used or not
-    isthere = np.ndarray(size, 'bool')
-    istherevals = np.ones(vals.shape, 'bool')
-    (function, value) = function_name_dict['or']
-    isthere[:] = value
-    function.at(isthere, indices, istherevals)
-
-    # fill things that were not used with fill value
-    output[np.invert(isthere)] = fill_value
-    
-    return output
-
-
-
-def region_extraction(img_sequence, maxsp=200, vis=False, redirect=False):
+def superpixels(im, maxsp=200, vis=False, redirect=False):
     """
     Region extraction process. uNLC obtains regions through SLIC 
     superpixel segmentation. This stage in the algorithm is where 
     uNLC and NLC differ from one another. Where NLC adopts a trained 
-    edge detector, uNLC instead performs SLIC. While no parameters 
-    were stated in Pathak's paper, the full pipeline uses a maximum
-    superpixel count of 400. However, OpenCV's SLIC uses a maximum 
-    region size per superpixel. The original region extraction 
-    process can be found in section 3.2, 'Detailed Description of the
-    Algorithm' under 'Region Extraction' [2]. For uNLC, this is 
-    described in section 5.1, 'Unsupervised Motion Segmentation' [1].
+    edge detector, uNLC instead performs SLIC. The original region 
+    extraction process can be found in section 3.2, 'Detailed 
+    Description of the Algorithm' under 'Region Extraction' [2]. 
+    For uNLC, this is described in section 5.1, 'Unsupervised Motion 
+    Segmentation' [1].
 
-    INPUT:  img_sequence - Image sequence undergoing uNLC.
-    OUTPUT: superpixels - Superpixel segmentation labels for each 
-            frame in a given image sequence.  
+    Get Slic Superpixels
+    Input: im: (h,w,c) or (n,h,w,c): 0-255: np.uint8: RGB
+    Output: sp: (h,w) or (n,h,w): 0-indexed regions, #regions <= maxsp
     """
-    
-    start_time = time.time()
-    
-    if img_sequence.ndim < 4:
-        img_sequence = img_sequence[None, ...]
-
-    superpixels = np.zeros(img_sequence.shape[:3], dtype=np.int)
-    
-    for i in range(img.shape[0]):
-
-        # Obtain SLIC superpixel segmentation labels. 
-        img_gauss = cv2.GaussianBlur(img_sequence[i],(5,5),0)
-        slico = cv2.ximgproc.createSuperpixelSLIC(
-            img_gauss, algorithm=cv2.ximgproc.SLICO, region_size=50)
-        slico.iterate(10)
-        slico.enforceLabelConnectivity()
-        superpixels[i] = slico.getLabels()
-
-        # Visualize the SLIC superpixel segmentation results. This 
-        # needs more work in the current implementation. 
-        if vis and False:
-            mask = slico.getLabelContourMask()    
-            mask_ind = np.where(mask==-1)
-            img[mask_ind] = np.array([0,255,255]) 
-            cv2.imwrite('slic_img.jpg', img)
-        
+    sTime = time.time()
+    if im.ndim < 4:
+        im = im[None, ...]
+    sp = np.zeros(im.shape[:3], dtype=np.int)
+    for i in range(im.shape[0]):
+        # slic needs im: float in [0,1]
+        sp[i] = slic(im[i].astype(np.float) / 255., n_segments=maxsp, sigma=5)
         if not redirect:
-            sys.stdout.write('Superpixel computation: [% 5.1f%%]\r' %(
-                100.0 * float((i + 1) / img_sequence.shape[0])))
+            sys.stdout.write('Superpixel computation: [% 5.1f%%]\r' %
+                                (100.0 * float((i + 1) / im.shape[0])))
             sys.stdout.flush()
+    eTime = time.time()
+    print('Superpixel computation finished: %.2f s' % (eTime - sTime))
 
-    end_time = time.time()
-    print('Superpixel computation finished: %.2f s' % (end_time - start_time))
+    if vis and False:
+        # TODO: set directory to save
+        from skimage.segmentation import mark_boundaries
+        for i in range(im.shape[0]):
+            Image.fromarray((mark_boundaries(im[i], sp[i]))).save('.jpg')
 
-    if img_sequence.ndim < 4:
-        return superpixels[0]
-    
-    return superpixels
-    
+    if im.ndim < 4:
+        return sp[0]
+    return sp
 
-def get_region_boxes(superpixels):
+
+def get_region_boxes(sp):
     """
-    Get bounding boxes for each superpixel region. 
-    INPUT: 
-        superpixels - (h,w): 0-indexed regions, number of regions <= 
-        max number of superpixels.
-    OUTPUT: 
-        boxes - (number of superpixels, 4) : (xmin, ymin, xmax, ymax)
+    Get bounding boxes for each superpixel image
+    Input: sp: (h,w): 0-indexed regions, #regions <= numsp
+    Output: boxes: (numsp, 4) : (xmin, ymin, xmax, ymax)
     """
     x = np.arange(0, sp.shape[1])
     y = np.arange(0, sp.shape[0])
     xv, yv = np.meshgrid(x, y)
     sizeOut = np.max(sp) + 1
-    sp1 = superpixels.reshape(-1)
+    sp1 = sp.reshape(-1)
     xv = xv.reshape(-1)
     yv = yv.reshape(-1)
     spxmin = utils.my_accumarray(sp1, xv, sizeOut, 'min')
@@ -188,7 +97,7 @@ def get_region_boxes(superpixels):
     return boxes
 
 
-def color_histogram_descriptor(im, colBins):
+def color_hist(im, colBins):
     """
     Concatenation of RGB and LAB color histograms. This is one of the 
     measurements used for the Region Descriptor when computing the 
@@ -203,35 +112,37 @@ def color_histogram_descriptor(im, colBins):
     In LAB colorspace, the lightness value, L, ranges from 0 to 100 
     and the color-opponent values, a and b, range from -128 to 127.
 
+    Get color histogram descriptors for RGB and LAB space.
     Input: im: (h,w,c): 0-255: np.uint8: RGB
     Output: descriptor: (colBins*6,)
     """
-    
-    assert im.ndim == 3 and im.shape[2] == 3, 'Requires RBG image.'
-    
-    rgb_lab = np.concatenate((im, color.rgb2lab(im)), axis=2).reshape((-1, 6))
-    color_descriptor = np.zeros((colBins * 6,), dtype=np.float)
-    
-    histogram_range = (
-        (0, 255),(0, 255),(0, 255),
-        (0, 100),(-128, 127),(-128, 127))
+    assert im.ndim == 3 and im.shape[2] == 3, "image should be rgb"
+    arr = np.concatenate((im, color.rgb2lab(im)), axis=2).reshape((-1, 6))
+    desc = np.zeros((colBins * 6,), dtype=np.float)
+    for i in range(3):
+        desc[i * colBins:(i + 1) * colBins], _ = np.histogram(
+            arr[:, i], bins=colBins, range=(0, 255))
+        desc[i * colBins:(i + 1) * colBins] /= np.sum(
+            desc[i * colBins:(i + 1) * colBins]) + (
+            np.sum(desc[i * colBins:(i + 1) * colBins]) < 1e-4)
+    i += 1
+    desc[i * colBins:(i + 1) * colBins], _ = np.histogram(
+        arr[:, i], bins=colBins, range=(0, 100))
+    desc[i * colBins:(i + 1) * colBins] /= np.sum(
+        desc[i * colBins:(i + 1) * colBins]) + (
+        np.sum(desc[i * colBins:(i + 1) * colBins]) < 1e-4)
+    for i in range(4, 6):
+        desc[i * colBins:(i + 1) * colBins], _ = np.histogram(
+            arr[:, i], bins=colBins, range=(-128, 127))
+        desc[i * colBins:(i + 1) * colBins] /= np.sum(
+            desc[i * colBins:(i + 1) * colBins]) + (
+            np.sum(desc[i * colBins:(i + 1) * colBins]) < 1e-4)
+    return desc
 
-    for i in range(6):
-        
-        color_descriptor[i*colBins:(i + 1)*colBins], _ = np.histogram(
-            rgb_lab[:, i], bins=colBins, range=histogram_range[i])
-        
-        color_descriptor[i * colBins:(i + 1) * colBins] /= (
-            np.sum(color_descriptor[i * colBins:(i + 1) * colBins]) 
-            + (np.sum(color_descriptor[i * colBins:(i + 1) * colBins]) < 1e-4))
-    
-    return color_descriptor
 
-
-def region_descriptor(
-    im, sp, spPatch=15, colBins=20, hogCells=9,hogBins=6, redirect=False):
+def compute_descriptor(im, sp, spPatch=15, colBins=20, hogCells=9,
+                        hogBins=6, redirect=False):
     """
-    Compute region descriptors for NLC.
     Region descriptors are computed for each superpixel. 
     The descriptor is made up of a concatenation of four 
     measurements: RGB color histogram and LAB color histogram (6 
@@ -240,21 +151,16 @@ def region_descriptor(
     the superpixel) and the relative spatial coordinates of the 
     superpixel. See section 3.2, 'Detailed Description of the 
     Algorithm - Region Descriptor' [2].
-    
-    INPUT:  im - Image or image sequence.
-            sp - Superpixel region labels. 
-            im: (h,w,c) or (n,h,w,c): 0-255: np.uint8: RGB
-            sp: (h,w) or (n,h,w): 0-indexed regions, #regions <= numsp
-            spPatch: patchsize around superpixel for feature 
-            computation
-    
-    OUTPUT: regions: (k,d) where k < numsp*n
-            frameEnd: (n,): indices of regions where frame ends: 
-            0-indexed, included   
+    Compute region descriptors for NLC
+    Input:
+        im: (h,w,c) or (n,h,w,c): 0-255: np.uint8: RGB
+        sp: (h,w) or (n,h,w): 0-indexed regions, #regions <= numsp
+        spPatch: patchsize around superpixel for feature computation
+    Output:
+        regions: (k,d) where k < numsp*n
+        frameEnd: (n,): indices of regions where frame ends: 0-indexed, included
     """
-
     sTime = time.time()
-    
     if im.ndim < 4:
         im = im[None, ...]
         sp = sp[None, ...]
@@ -285,19 +191,15 @@ def region_descriptor(
 
             imPatch = im[i, ymin:ymax, xmin:xmax]
             hogF = hog(
-                color.rgb2gray(imPatch), 
-                orientations=hogBins,
+                color.rgb2gray(imPatch), orientations=hogBins,
                 pixels_per_cell=(hogCellSize, hogCellSize),
-                cells_per_block=(int(np.sqrt(hogCells)),int(np.sqrt(hogCells))),
+                cells_per_block=(int(np.sqrt(hogCells)),
+                                    int(np.sqrt(hogCells))),
                 visualise=False)
-            
-            colHist = color_histogram_descriptor(imPatch, colBins)
-            
+            colHist = color_hist(imPatch, colBins)
             regions[count, :] = np.hstack((
                 hogF, colHist, [boxes[j, 1] * 1. / h, boxes[j, 0] * 1. / w]))
             count += 1
-        
-
         frameEnd[i] = count - 1
         if not redirect:
             sys.stdout.write('Descriptor computation: [% 5.1f%%]\r' %
@@ -321,17 +223,13 @@ def compute_nn(regions, frameEnd, F=15, L=4, redirect=False):
     following 15 frames. This results in 4(2*15 + 1) = 124 nearest 
     neighbors. See section 3.2, 'Detailed Description of the 
     Algorithm - Nearest Neighbor (NNs) Search' [2].
-
-    INPUT:  regions: (k,d): k regions with d-dim feature
-            frameEnd: (n,): indices of regions where frame ends: 
-            0-indexed, included
-            F: temporal radius: nn to be searched in (2F+1) frames 
-            around curr frame
-            L: nearest neighbors to be found per frame on an average
-    
-    OUTPUT: transM: (k,k)
+    Input:
+        regions: (k,d): k regions with d-dim feature
+        frameEnd: (n,): indices of regions where frame ends: 0-indexed, included
+        F: temporal radius: nn to be searched in (2F+1) frames around curr frame
+        L: nearest neighbors to be found per frame on an average
+    Output: transM: (k,k)
     """
-
     sTime = time.time()
     M = L * (2 * F + 1)
     k, _ = regions.shape
@@ -366,9 +264,7 @@ def compute_nn(regions, frameEnd, F=15, L=4, redirect=False):
 
 def normalize_nn(transM, sigma=1):
     """
-    Want to votes to have weighting based on proximity. Do not 
-    believe this is officially mentioned in either paper.
-    Normalize transition matrix using gaussian weighing. 
+    Normalize transition matrix using gaussian weighing
     Input:
         transM: (k,k)
         sigma: var=sigma^2 of gaussian weight between elements
@@ -380,112 +276,16 @@ def normalize_nn(transM, sigma=1):
         -np.square(transM[np.nonzero(transM)]) / sigma**2)
     transM[np.arange(k), np.arange(k)] = 1.
     normalization = np.dot(transM, np.ones(k))
+    # This is inefficient, bottom line is better ..
+    # transM = np.dot(np.diag(1. / normalization), transM)
     transM = (1. / normalization).reshape((-1, 1)) * transM
-    
     return transM
 
 
-def isDominant(
-        flow, flow_magnitude_thresh, flow_direction_thresh, direction_bins=10):
-    """
-    Look for frames where the dominant motion is close to zero. 
-    First, check if the median of the optical flow magnitude is 
-    below a certain threshold, denoted as flow_magnitude_thresh.
-    Denote this as 'static' dominant motion'. 
-    Then, check if the camera translation results in a dominant 
-    direction. This is done by creating a histogram of the 
-    optical flow orientations (directions) for each frame. 
-    The bins are weighted according to the optical flow 
-    magnitude. If the the bin with the most counts has a weight 
-    above a certain threshold, denoted as flow_direction_thresh, 
-    then it can be declared that the camera translation is some 
-    dominant direction. Denote these frames as having 'dominant
-    translation'. For a complete description of determining what the 
-    dominant motion is, refer to section 4, Initializing the 
-    Voting Scheme , under Motion Saliency Cues.[2].
-
-    INPUTS: 
-            flow_magnitude_thresh - Optical flow magnitude threshold. 
-            In the original NLC paper, the authors use a value of 1.
-
-            flow_direction_thresh - Optical flow direction threshold.
-            In original NLC paper, the authors use a value of 0.75.
-
-            direction_bins - Number of bins for the flow orientation 
-            histogram.
-    """
-
-    # Initialize the motion type. This will indicate what the 
-    # dominant motion is in a given frame. This will take label 
-    # of either 'static' or 'translation'. Target will be used for 
-    # determining the deviation from either 0 or the estimated 
-    # translation direction.
-
-    motion_type = ''
-    dominant = False
-    target = -1000 
-
-    flow_magnitude = np.square(flow)
-    flow_magnitude = np.sqrt(flow_magnitude[..., 0] + flow_magnitude[..., 1])
-    flow_magnitude_median = np.median(flow_magnitude)
-    
-    # Test case for determining if the camera is static. 
-    if flow_magnitude_median < flow_magnitude_thresh:
-        dominant = True
-        targetIm = flow_magnitude # targer IM? not sure
-        target = 0. #again not sure
-        motion_type = 'static'
-
-    # Look for frames where the camera translation is in some 
-    # dominant direction, given that dominant motion is not close 
-    # to zero. 
-    if not dominant:
-
-        # Orientation in radians: (-pi, pi).
-        flow_orientation = np.arctan2(flow[..., 1], flow[..., 0])
-
-        # Compute global histogram of the optical flow orientations 
-        # for each frame. Weight the bins by the optical flow 
-        # magnitude. Normalize the results. 
-        flow_orientation_histogram, bins = np.histogram(
-            flow_orientation, bins=direction_bins,
-            weights=flow_magnitude, range=(-np.pi, np.pi))
-        
-        flow_orientation_histogram /= (np.sum(flow_orientation) 
-            + (np.sum(flow_orientation) == 0))
-        
-        # Test case for determining if the camera is translational.
-        if np.max(flow_orientation_histogram) > flow_direction_thresh:
-            dominant = True
-            targetIm = flow_orientation
-            target = (bins[np.argmax(flow_orientation_histogram)] 
-                + bins[np.argmax(flow_orientation_histogram) + 1])
-            target /= 2.
-            motion_type = 'translate'
-
-    # If dominant motion has been established, determine the 
-    # amount each pixel within a patch deviates form the dominant 
-    # motion. Use deviation as Var(X) = E[(X-mu)^2].
-    if dominant:
-        deviation = (targetIm - target)**2
-        if moType == 'translate':
-            
-            # For orientation: theta = theta + 2pi. Thus,want min of:
-            # theta1-theta2 = theta1-theta2-2pi = 2pi+theta1-theta2.
-            deviation = np.minimum(deviation, (targetIm - target + 2.*np.pi)**2)
-            deviation = np.minimum(deviation, (targetIm - target - 2.*np.pi)**2)
-        
-        saliency = convolve2d(deviation, np.ones((patchSz,patchSz))/patchSz**2,
-            mode='same', boundary='symm')
-        return dominant, moType, target, saliency
-
-    return dominant, moType, target, -1000
-
-
-def compute_saliency(
-    imSeq, pyflow_parameters=False, flowSz=100, flowBdd=12.5, flowF=3, 
-    flowWinSz=10, flowMagTh=1, flowDirTh=0.75, numDomFTh=0.5, flowDirBins=10, 
-    patchSz=5, redirect=False, doNormalize=True, defaultToAppearance=True):
+def compute_saliency(imSeq, pyflow_parameters=False, flowSz=100, flowBdd=12.5, flowF=3, flowWinSz=10,
+                        flowMagTh=1, flowDirTh=0.75, numDomFTh=0.5,
+                        flowDirBins=10, patchSz=5, redirect=False,
+                        doNormalize=True, defaultToAppearance=True):
     """
     Initialize for FG/BG votes by Motion or Appearance Saliency. FG>0, BG=0.
     Input:
@@ -501,8 +301,68 @@ def compute_saliency(
         salImSeq: (n, h, w) where n > 1: float. FG>0, BG=0. score in [0,1].
     """
 
-    sTime = time.time()
+    def isDominant(flow, flowMagTh, flowDirTh, dirBins=10):
+         """
+        Look for frames where the dominant motion is close to zero. 
+        First, check if the median of the optical flow magnitude is 
+        below a certain threshold, denoted as flow_magnitude_thresh.
+        Denote this as 'static' dominant motion'. 
+        Then, check if the camera translation results in a dominant 
+        direction. This is done by creating a histogram of the 
+        optical flow orientations (directions) for each frame. 
+        The bins are weighted according to the optical flow 
+        magnitude. If the the bin with the most counts has a weight 
+        above a certain threshold, denoted as flow_direction_thresh, 
+        then it can be declared that the camera translation is some 
+        dominant direction. Denote these frames as having 'dominant
+        translation'. For a complete description of determining what the 
+        dominant motion is, refer to section 4, Initializing the 
+        Voting Scheme , under Motion Saliency Cues.[2].
+        """
+        mag = np.square(flow)
+        mag = np.sqrt(mag[..., 0] + mag[..., 1])
+        med = np.median(mag)
+        dominant = False
+        target = -1000
+        moType = ''
+        if med < flowMagTh:
+            dominant = True
+            targetIm = mag
+            target = 0.
+            moType = 'static'
 
+        if not dominant:
+            # orientation in radians: (-pi, pi): disambiguates sign of arctan
+            orien = np.arctan2(flow[..., 1], flow[..., 0])
+            # use ranges, number of bins and normalization to compute histogram
+            dirHist, bins = np.histogram(orien, bins=dirBins, weights=mag,
+                                            range=(-np.pi, np.pi))
+            dirHist /= np.sum(dirHist) + (np.sum(dirHist) == 0)
+            if np.max(dirHist) > flowDirTh:
+                dominant = True
+                targetIm = orien
+                target = bins[np.argmax(dirHist)] + bins[np.argmax(dirHist) + 1]
+                target /= 2.
+                moType = 'translate'
+
+        if dominant:
+            # E[(x-mu)^2]
+            deviation = (targetIm - target)**2
+            if moType == 'translate':
+                # for orientation: theta = theta + 2pi. Thus, we want min of:
+                # (theta1-theta2) = (theta1-theta2-2pi) = (2pi+theta1-theta2)
+                deviation = np.minimum(
+                    deviation, (targetIm - target + 2. * np.pi)**2)
+                deviation = np.minimum(
+                    deviation, (targetIm - target - 2. * np.pi)**2)
+            saliency = convolve2d(
+                deviation, np.ones((patchSz, patchSz)) / patchSz**2,
+                mode='same', boundary='symm')
+            return dominant, moType, target, saliency
+
+        return dominant, moType, target, -1000
+
+    sTime = time.time()
     # pyflow Options:
     if pyflow_parameters == False:
         alpha = 0.012
@@ -518,7 +378,7 @@ def compute_saliency(
         nOuterFPIterations = pyflow_parameters['nOuterFPIterations']
         nInnerFPIterations = pyflow_parameters['nInnerFPIterations']
         nSORIterations = pyflow_parameters['nSORIterations']
-
+        
 
     n, h, w, c = imSeq.shape
     im = np.zeros((n, flowSz, flowSz, c), np.uint8)
@@ -535,14 +395,31 @@ def compute_saliency(
         for j in range(-flowF, flowF + 1):
             if j == 0 or i + j < 0 or i + j >= n:
                 continue
+            # flow = calcOpticalFlowFarneback(
+            #     color.rgb2gray(im[i]), color.rgb2gray(im[i + j]), 0.5, 4,
+            #     flowWinSz, 10, 5, 1.1, OPTFLOW_FARNEBACK_GAUSSIAN)
             # pyflow needs im: float in [0,1]
             u, v, _ = pyflow.coarse2fine_flow(
                 im[i].astype(float) / 255., im[i + j].astype(float) / 255.,
-                *pyflow_parameters, 0)
+                alpha, ratio, minWidth, nOuterFPIterations, nInnerFPIterations,
+                nSORIterations, 0)
             flow = np.concatenate((u[..., None], v[..., None]), axis=2)
 
             dominant, _, target, salIm = isDominant(
                 flow, flowMagTh, flowDirTh, dirBins=flowDirBins)
+
+            if False:
+                odir = '/home/dpathak/local/data/trash/my_nlc/nlc_out/'
+                np.save(odir + '/np/outFlow_%d_%d.npy' % (i, i + j), flow)
+                import cv2
+                hsv = np.zeros((100, 100, 3), dtype=np.uint8)
+                hsv[:, :, 0] = 255
+                hsv[:, :, 1] = 255
+                mag, ang = cv2.cartToPolar(flow[..., 0], flow[..., 1])
+                hsv[..., 0] = ang * 180 / np.pi / 2
+                hsv[..., 2] = cv2.normalize(mag, None, 0, 255, cv2.NORM_MINMAX)
+                rgb = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+                cv2.imwrite(odir + '/im/outFlow_%d_%d.png' % (i, i + j), rgb)
 
             if dominant:
                 salImSeq[i] += salIm
@@ -709,11 +586,11 @@ def remove_low_energy_blobs(maskSeq, binTh, relSize=0.6, relEnergy=None,
     return maskSeq
 
 
-def nlc(imSeq, maxsp, iters, outdir, suffix='', pyflow_parameters=False, 
-    clearBlobs=False, binTh=None, relEnergy=None, redirect=False, 
-    doload=False, dosave=False):
+def nlc(imSeq, maxsp, iters, outdir, suffix='', pyflow_parameters=False,
+            clearBlobs=False, binTh=None, relEnergy=None,
+            redirect=False, doload=False, dosave=False):
     """
-    Perform Non-local Consensus Voting (NLC) voting. 
+    Perform Non-local Consensus voting moving object segmentation (NLC)
     Input:
         imSeq: (n, h, w, c) where n > 1: 0-255: np.uint8: RGB
         maxsp: max # of superpixels per image
@@ -721,35 +598,41 @@ def nlc(imSeq, maxsp, iters, outdir, suffix='', pyflow_parameters=False,
     Output:
         maskSeq: (n, h, w) where n > 1: float. FG>0, BG=0. Not thresholded.
     """
-
-    if doload == True:
-        dosave = False
+    if dosave is None:
+        dosave = not doload
+    import sys
     sys.setrecursionlimit(100000)
 
     if not doload:
-        sp = region_extraction(imSeq, maxsp, redirect=redirect)
-        regions, frameEnd = region_descriptor(imSeq, sp, redirect=redirect)
+        # compute Superpixels -- 2.5s per 720x1280 image for any maxsp
+        sp = superpixels(imSeq, maxsp, redirect=redirect)
+
+        # compute region descriptors
+        regions, frameEnd = compute_descriptor(imSeq, sp, redirect=redirect)
+
+        # compute nearest neighbors
         transM = compute_nn(regions, frameEnd, F=15, L=2, redirect=redirect)
-        transM = normalize_nn(transM, sigma=np.sqrt(0.1))
-        salImSeq = compute_saliency(
-            imSeq, pyflow_parameters, flowBdd=12.5, flowDirBins=20,redirect=redirect)
+
+        # get initial saliency score: either Motion or Appearance Saliency
+        salImSeq = compute_saliency(imSeq,pyflow_parameters=pyflow_parameters, flowBdd=12.5, flowDirBins=20,
+                                        redirect=redirect)
 
     suffix = outdir.split('/')[-1] if suffix == '' else suffix
-    
     if doload:
         sp = np.load(outdir + '/sp_%s.npy' % suffix)
         regions = np.load(outdir + '/regions_%s.npy' % suffix)
         frameEnd = np.load(outdir + '/frameEnd_%s.npy' % suffix)
         transM = np.load(outdir + '/transM_%s.npy' % suffix)
         salImSeq = np.load(outdir + '/salImSeq_%s.npy' % suffix)
-    
     if dosave:
         np.save(outdir + '/sp_%s.npy' % suffix, sp)
         np.save(outdir + '/regions_%s.npy' % suffix, regions)
         np.save(outdir + '/frameEnd_%s.npy' % suffix, frameEnd)
         np.save(outdir + '/transM_%s.npy' % suffix, transM)
         np.save(outdir + '/salImSeq_%s.npy' % suffix, salImSeq)
-    
+
+    # create transition matrix
+    transM = normalize_nn(transM, sigma=np.sqrt(0.1))
 
     # get initial votes from saliency salscores
     votes = salScore2votes(salImSeq, sp)
@@ -774,10 +657,6 @@ def nlc(imSeq, maxsp, iters, outdir, suffix='', pyflow_parameters=False,
 
     return maskSeq
 
-
-def main():
+if __name__ == "__main__":
     print('Please execute iss_main.py.')
 
-
-if __name__ == "__main__":
-    main()

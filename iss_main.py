@@ -75,7 +75,7 @@ def command_line_parse():
         type = directory_valid)
 
     parser.add_argument('-outdir',
-        help = 'Path to the output directory to save results. If no directory' \
+        help = 'Path to the output directory to save results. If no directory '\
             'is specified, \'results\' directory will be created at the same ' \
             'level as the input directory.',
         default = False,
@@ -364,8 +364,6 @@ def iss_uNLC(img_directory,out_directory,frame_gap,batch_number):
     # Image sequence statistics.
     print('Total Sequence Shape: ', image_sequence.shape)
     print('Memory Usage for Sequence: %.2f MB.' %sequence_memory)
-
-    print(image_sequence.nbytes)
 
     if sequence_memory > memory_limit:
         print('*****Warning: Image sequence may be too large!*****\n'
