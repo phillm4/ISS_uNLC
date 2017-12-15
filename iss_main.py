@@ -28,7 +28,7 @@ import sys
 import time
 
 import _init_nlc_path
-import videoseg.src.iss_uNLC as uNLC
+import videoseg.src.nlc_mod as uNLC
 import videoseg.src.utils as utils
 
 
