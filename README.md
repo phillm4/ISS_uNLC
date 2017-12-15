@@ -4,7 +4,7 @@ Instrument shaft segmentation for surgical robotic images was performed using th
 
 The unsupervised motion-based segmentation algorithm is largely inspired by Faktor and Irani’s 2014 British Machine Vision Conference (BMVC) paper, [''Video Segmentation by Non-Local Consensus Voting''](http://www.wisdom.weizmann.ac.il/~vision/NonLocalVideoSegmentation.html). Pathak et al.’s algorithm, denoted as uNLC, differs from Faktor and Irani’s algorithm, denoted as NLC, as uNLC substitutes a trained edge detector for an unsupervised superpixel generator. 
 
-Using the methods described by Pathak et al. and Faktor and Irani, pseudo ground truth data for instrument shaft segmentations was obtained and evaluated. The installation process and instructions on using the software is described below.
+Using the methods described by Pathak et al. and Faktor & Irani, pseudo ground truth data for instrument shaft segmentations was obtained and evaluated. The installation process and instructions on using the software is described below.
 
 ### Disclaimer
 The majority of the software used for this project is from Pathak's [videoseg](https://github.com/pathak22/videoseg) library. While a handful of modifications and changes were introduced, the software is ultimately under the ownership of Pathak et al., the authors of [''Learning Features by Watching Objects Move''](http://cs.berkeley.edu/~pathak/unsupervised_video/).
