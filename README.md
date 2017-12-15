@@ -91,7 +91,7 @@ $ cp modified_scripts/MR_mod.py lib/videoseg/lib/mr_saliency/
 ```
 
 ##### 6. Add nlc\_mod.py
-The last step in the installation process is to move the included *nlc\_mod.py* script into *videoseg/lib*. *nlc\_mod.py* is a modified version of *videoseq/src/NLC.py* which allows for the tuning of the pyflow parameters. It is intended to update *nlc\_mod.py* in the future as to remove this step in the installation process and remove additional dependencies.
+The last step in the installation process is to move the included *nlc\_mod.py* script into *videoseg/lib*. *nlc\_mod.py* is a modified version of *videoseq/src/NLC.py* which allows for the tuning of the pyflow parameters. It is intended to update *nlc\_mod.py* in the future as to remove this step in the installation process and to remove additional dependencies.
 ```
 $ cd ISS_uNLC/
 $ cp modified_scripts/nlc_mod.py lib/videoseg/src/
@@ -117,7 +117,7 @@ optional arguments:
   -indir INDIR    Path to the input directory that contains the images to
                   test.
   -outdir OUTDIR  Path to the output directory to save results. If no
-                  directoryis specified, 'results' directory will be created
+                  directory is specified, 'results' directory will be created
                   at the same level as the input directory.
   -batch BATCH    Batch input. Path to a directory that contains sub-folders
                   containing images to test.
@@ -127,10 +127,10 @@ optional arguments:
   -fgap FGAP      Frame gap between images in a sequence. Default 0.
 ```
 
-Note that there are three different methods for inputting data and two additional arguments which correspond to an output directory a frame gap. The frame gap is important when specifying the frames that uNLC is to compute across in a given image sequence. If a frame gap too small is chosen, memory errors may occur and the computation may take a long time (up to an hour). When using uNLC, it is important to be aware of the length of image sequences and the frame gap as to prevent memory issues. If a frame gap too large is chosen, the obtained results will be useless. Furthermore, uNLC works best on image sequences where there is significant motion by the foreground objects. If the objects are barely moving, or move relatively slow, it may be beneficial to increase the frame gap. The output directory is where the segmented images will be saved. If this is not specified, a results directory will be created at the same level of any given input. Two examples are shown below.
+Note that there are three different methods for inputting data, and two additional arguments which correspond to an output directory and a frame gap. The frame gap is important when specifying the frames that uNLC is to compute across in a given image sequence. If a frame gap too small is chosen, memory errors may occur and the computation may take a long time (up to an hour). When using uNLC, it is important to be aware of the length of image sequences and the frame gap as to prevent memory issues. If a frame gap too large is chosen, the obtained results will be useless. Furthermore, uNLC works best on image sequences where there is significant motion by the foreground objects. If the objects are barely moving, or move relatively slow, it may be beneficial to increase the frame gap. The output directory is where the segmented images will be saved. If this is not specified, a results directory will be created at the same level of any given input. Two examples are shown below.
 
 #### Example (1.) 
-Perform segmentation using the `-batch` input. In the context of *iss\_main.py*, this option is to be selected if there is a folder that contains several subfolders, each of which that contains images. This is illustrated below.
+Perform segmentation using the `-batch` input. In the context of *iss\_main.py*, this option is to be selected if there is a folder that contains several subfolders, each of which that contains images. This is illustrated as the following.
 ```
 - batch_folder/
 -- image_directory_00/
@@ -143,12 +143,12 @@ Perform segmentation using the `-batch` input. In the context of *iss\_main.py*,
 --- ...
 -- ...
 ```
-In order to then perform segmentation on this batch, the commands and potential output are shown below. For this example, the included *test\_batch/* will be used as the input batch, the output directory will be generated automatically, and a frame gap of 3 frames will be used. This process will take several minutes to complete.
+In order to then perform segmentation on this batch, the commands and potential output are shown below. For this example, the included *test\_batch/* will be used as the input batch folder, the output directory will be generated automatically, and a frame gap of 3 frames will be used. This process will take several minutes to complete.
 ```
 $ cd ISS_uNLC/
 $ unzip test_batch
 $ rm test_batch.zip
-$ python iss_main.py -batch test_batch -fgap 2
+$ python iss_main.py -batch test_batch -fgap 3
 
 Batch:  0
 Input Directory:  /home/.../ISS_uNLC/test_batch/00
@@ -214,7 +214,7 @@ Output Directory:  /home/.../vidpath/results
 ```
 The output should mimic that of Example 1. 
 
-Once the process is complete (it may take several minutes depending on the length of the image sequence), two new folders *src\_images/* and *results/* should have been created where the video is located. One contains the frames from the video (*src\_images/*), the other contains the segmentation results (*results/*). It is not recommend to use a video that is longer than 30 seconds. The size of the batches created by the video to image conversion is denoted as [*images\_per\_batch*](https://github.com/phillm4/ISS_uNLC/blob/5b7681b837a87745ed8e648dbedb0fa881e181db/iss_main.py#L213).
+Once the process is complete (it may take several minutes depending on the length of the image sequence), two new folders *src\_images/* and *results/* should have been created where the video is located. One contains the frames from the video (*src\_images/*), the other contains the segmentation results (*results/*). The size of the batches created by the video to image conversion can be edited and is denoted as [*images\_per\_batch*](https://github.com/phillm4/ISS_uNLC/blob/5b7681b837a87745ed8e648dbedb0fa881e181db/iss_main.py#L213).
 
 ### Tuning uNLC
 
@@ -248,4 +248,4 @@ If it is desired to adjust any of the parameters for the uNLC algorithm besides 
 ```
 
 ### Next Steps
-This concludes the installation and use instructions for uNLC for instrument segmentation. Several changes to the algorithm are planned for the future and it is intended to use the generated results to train a Fully Convolutional Network to perform instrument shaft segmentation. Additional scripts including a pytorch example and a slic superpixel demo can be found in the *additional\_tools* directory. 
+This concludes the installation and use instructions for uNLC. Several changes to the algorithm are planned for the future. It is intended to use the generated results to train a Fully Convolutional Network to perform instrument shaft segmentation. Additional scripts including a pytorch example and a slic superpixel demo can be found in the *additional\_tools* directory. 
