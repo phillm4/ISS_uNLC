@@ -1,4 +1,4 @@
-# Instrument Shaft Segmentation using Unsupervised Non-local Consensus Voting
+## Instrument Shaft Segmentation using Unsupervised Non-local Consensus Voting
 
 Instrument shaft segmentation for surgical robotic images was performed using the methods described in Pathak et al.’s 2017 Conference on Computer Vision and Pattern Recognition (CVPR) paper, [''Learning Features by Watching Objects Move''](http://cs.berkeley.edu/~pathak/unsupervised_video/). In particular, pseudo ground truth data for instrument segmentation was generated using the [unsupervised motion-based segmentation algorithm](https://github.com/pathak22/videoseg) presented in section 5.1 of Pathak et al. Convolutional neural networks (CNNs) trained from pseudo ground truth data have been shown to outperform the leading unsupervised methods for object detection. It is desired that the obtained pseudo ground truth data for instrument segmentation will be used to train Fully Convolutional Networks (FCNs) to perform semantic segmentation. 
 
@@ -6,13 +6,13 @@ The unsupervised motion-based segmentation algorithm is largely inspired by Fakt
 
 Using the methods described in Pathak et al. and Faktor and Irani, pseudo ground truth data for instrument shaft segmentations was obtained and evaluated. The installation and usage instructions of the software that was used to obtain the presented results is described below.
 
-## Disclaimer
+### Disclaimer
 The majority of the software used for this project is from Pathak's [videoseg](https://github.com/pathak22/videoseg) library. While a handful of modifications and changes were introduced, the software is ultimately under the ownership of Pathak et al., the authors of [Learning Features by Watching Objects Move](http://cs.berkeley.edu/~pathak/unsupervised_video/).
 
-## Description of Contents
+### Description of Contents
 It is intend in the future to remove the bulk of the dependencies on scikit-image and PIL, and instead use OpenCV exclusively. This process has already been initiated.
 
-## Required Libraries and Additional Dependencies
+### Required Libraries and Additional Dependencies
 In order to run the python scripts for uNLC, several additional libraries are required. One of the required libraries if pyflow. Pyflow is a wrapper around [Ce Liu's C++ implementation of Coarse2Fine Optical Flow](http://people.csail.mit.edu/celiu/OpticalFlow/), and the python wrapper utilizes the python package Cython. Cython consists of C-extensions for Python. When attempting to build the pyflow library on a windows machine, "error: Unable to find vcvarsall.bat" was encountered. This appears to be a common error due to Visual Studio. As a result, all work was completed on an Ubuntu 16.04 LTS system.  
 
 ```
@@ -26,7 +26,7 @@ In order to run the python scripts for uNLC, several additional libraries are re
 
 The Majority of the libraries can be installed via pip or conda with the exception of OpenCV. While the uNLC algorithm does work without the FFmpeg dependencies, it is required if video files are to be read. 
 
-## Installation Instructions
+### Installation Instructions
 The installation instructions mimic those of Pathak’s videoseg, however the installations of Dense CRF, Kernel Temporal Segmentation, and DeepMatching are all neglected. These packages need to be installed if it is desired to run Pathak’s *full\_pipe.py* script. In addition, several modifications are required in order for functions to work properly. A handful of scripts have been included as an attempt to mitigate any issues.
 
 ##### 1. Download and install this repository.
@@ -79,7 +79,7 @@ $ cp iss_uNLC.py lib/mr_saliency/
 
 uNLC should be ready to use.
 
-## Usage Instructions
+### Usage Instructions
 All operations are handled by *iss\_main.py*. As previously indicated, this is the main program to run the uNLC algorithm and is a wrapper around Pathak's nlc algorithm. It is inspired by the NLC library's *run\_full.py* and *nlc.py*. The function can be executed from the command line and excepts a variety of arguments. In general, *iss\_main.py* requires an input corresponding to the path of either an image directory, a directory containing subfolders with images, or a video. Additional arguments include the ability to adjust the output directory and a frame gap. Use `-h` to view the arguments.
 
 ```
@@ -195,7 +195,7 @@ Output Directory:  /home/.../ISS_uNLC/results
 ```
 The output should mimic that of Example 1. 
 
-## Tuning uNLC
+### Tuning uNLC
 
 If it is desired to adjust any of the parameters for the uNLC besides the frame gap, these can be modified within *iss\_main.py* under the [iss\_uNLC() function](https://github.com/phillm4/ISS_uNLC/blob/edc62b3c5af0547940d9d7184769de3fcc252631/iss_main.py#L322). 
 
