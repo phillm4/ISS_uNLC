@@ -89,7 +89,7 @@ def command_line_parse():
 
     parser.add_argument('-vid',
         help = 'Path to the video file to be converted. ' \
-            'Include the video itself. If inputing a video, the video will' \
+            'Include the video itself. If inputting a video, the video will ' \
             'be split into subfolders to conserve memory when running uNLC.',
         default = False,
         type = vid_valid)
